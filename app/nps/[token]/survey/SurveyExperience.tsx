@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   getStepByIndex,
+  identityQuestions,
   surveySteps,
   totalQuestionCount,
   type SurveyQuestion,
@@ -52,10 +53,21 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
   const step = getStepByIndex(currentStep);
   const progress = Math.round(((currentStep + 1) / surveySteps.length) * 100);
   const isLastStep = currentStep === surveySteps.length - 1;
+  const surveyQuestionCount = totalQuestionCount - identityQuestions.length;
 
   const answeredCount = useMemo(() => {
     return surveySteps
       .flatMap((surveyStep) => surveyStep.questions)
+      .filter((question) => {
+        const answer = answers[question.id];
+        return answer !== undefined && String(answer).trim().length > 0;
+      }).length;
+  }, [answers]);
+
+  const answeredSurveyCount = useMemo(() => {
+    return surveySteps
+      .flatMap((surveyStep) => surveyStep.questions)
+      .filter((question) => question.type !== "identity")
       .filter((question) => {
         const answer = answers[question.id];
         return answer !== undefined && String(answer).trim().length > 0;
@@ -336,8 +348,18 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
             <p className="eyebrow">{step.eyebrow}</p>
             <h2>{step.title}</h2>
             <p className="lead">{step.description}</p>
+            {currentStep === 0 ? (
+              <p className="identity-note">
+                Esta pesquisa é identificada para que as respostas sejam
+                analisadas no contexto correto da parceria.
+              </p>
+            ) : null}
 
-            <div className="question-stack">
+            <div
+              className={`question-stack ${
+                currentStep === 0 ? "identity-stack" : ""
+              }`}
+            >
               {step.questions.map((question) => (
                 <QuestionBlock
                   key={question.id}
@@ -353,7 +375,9 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
 
           <footer className="footer-actions">
             <span className="save-state">
-              {saveState} | {answeredCount} de {totalQuestionCount} respostas
+              {currentStep === 0
+                ? `${saveState} | dados confirmados`
+                : `${saveState} | ${answeredSurveyCount} de ${surveyQuestionCount} respostas`}
             </span>
             <div className="actions">
               {currentStep > 0 ? (

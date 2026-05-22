@@ -55,6 +55,23 @@ a {
   margin: 0 auto;
 }
 
+.landing-shell {
+  display: flex;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: 22px 20px;
+}
+
+.landing-frame {
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-shell .topbar {
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+}
+
 .topbar {
   display: flex;
   align-items: center;
@@ -102,6 +119,23 @@ a {
   padding: 44px;
 }
 
+.compact-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px;
+  gap: 28px;
+  align-items: center;
+  min-height: min(620px, calc(100svh - 132px));
+  padding: clamp(28px, 5vh, 42px) 44px;
+}
+
+.compact-hero::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  margin: 0;
+}
+
 .hero::before,
 .survey-card::before,
 .success-panel::before {
@@ -146,6 +180,61 @@ h2 {
   color: #425466;
   font-size: 18px;
   line-height: 1.55;
+}
+
+.compact-hero h1 {
+  max-width: 680px;
+  margin-bottom: 14px;
+  font-size: clamp(36px, 5.8vw, 58px);
+}
+
+.compact-hero .lead {
+  max-width: 680px;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.compact-hero .actions {
+  margin-top: 22px;
+}
+
+.trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 14px;
+}
+
+.trust-strip span {
+  border: 1px solid #dce7f0;
+  border-radius: 999px;
+  padding: 8px 11px;
+  background: #fbfdff;
+  color: #334e68;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.hero-aside {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  border-left: 1px solid var(--line);
+  color: var(--primary);
+}
+
+.hero-aside strong {
+  display: block;
+  font-size: 58px;
+  line-height: 1;
+}
+
+.hero-aside span {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .hero-grid {
@@ -265,6 +354,24 @@ h2 {
 .question-stack {
   display: grid;
   gap: 22px;
+}
+
+.identity-stack {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.identity-stack .field:first-child {
+  grid-column: 1 / -1;
+}
+
+.identity-note {
+  border-left: 3px solid var(--accent);
+  margin: -2px 0 18px;
+  padding: 8px 0 8px 12px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
 }
 
 .question {
@@ -735,6 +842,12 @@ button:focus-visible,
     padding: 18px 12px;
   }
 
+  .landing-shell {
+    display: block;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
   .topbar {
     align-items: flex-start;
     flex-direction: column;
@@ -750,9 +863,27 @@ button:focus-visible,
     padding: 28px 20px;
   }
 
+  .compact-hero {
+    display: block;
+    min-height: auto;
+  }
+
+  .compact-hero h1 {
+    font-size: 34px;
+  }
+
+  .hero-aside {
+    display: none;
+  }
+
   .hero-grid,
-  .field-grid {
+  .field-grid,
+  .identity-stack {
     grid-template-columns: 1fr;
+  }
+
+  .identity-stack .field:first-child {
+    grid-column: auto;
   }
 
   .progress-area,

@@ -10,8 +10,8 @@ export default async function LandingPage({ params }: LandingPageProps) {
   const { token } = await params;
 
   return (
-    <main className="page-shell">
-      <div className="survey-frame">
+    <main className="page-shell landing-shell">
+      <div className="survey-frame landing-frame">
         <header className="topbar">
           <div className="brand">
             <img
@@ -23,39 +23,36 @@ export default async function LandingPage({ params }: LandingPageProps) {
           <span className="status-pill">Tempo estimado: 3 a 5 minutos</span>
         </header>
 
-        <section className="panel hero">
-          <p className="eyebrow">Pesquisa de Satisfação | NPS | Maio 2026</p>
-          <h1>Queremos ouvir sua percepção sobre a parceria.</h1>
-          <p className="lead">
-            Sua percepção ajuda a Prime Control a priorizar melhorias,
-            fortalecer a parceria e direcionar ações para gerar mais valor ao
-            seu negócio.
-          </p>
+        <section className="panel hero compact-hero">
+          <div className="hero-copy">
+            <p className="eyebrow">Pesquisa de Satisfação | NPS | Maio 2026</p>
+            <h1>Sua percepção sobre a parceria Prime Control.</h1>
+            <p className="lead">
+              Esta pesquisa ajuda a direcionar melhorias na relação, nas entregas
+              e na geração de valor para o seu negócio.
+            </p>
 
-          <div className="hero-grid">
-            <div className="info-tile">
-              <strong>Rápida</strong>
-              <span>A experiência foi organizada em etapas curtas.</span>
+            <div className="trust-strip" aria-label="Informações da pesquisa">
+              <span>Etapas curtas</span>
+              <span>Progresso salvo</span>
+              <span>Resposta identificada</span>
             </div>
-            <div className="info-tile">
-              <strong>Responsável</strong>
-              <span>As respostas orientam a melhoria contínua da parceria.</span>
-            </div>
-            <div className="info-tile">
-              <strong>Retomável</strong>
-              <span>O progresso pode ser salvo para continuar depois.</span>
+
+            <p className="helper">
+              As respostas serão analisadas com responsabilidade pela Prime
+              Control para orientar ações de melhoria contínua.
+            </p>
+
+            <div className="actions">
+              <Link className="button" href={`/nps/${token}/survey`}>
+                Iniciar pesquisa
+              </Link>
             </div>
           </div>
 
-          <p className="helper">
-            Suas respostas serão analisadas com responsabilidade e usadas para
-            orientar ações de melhoria contínua.
-          </p>
-
-          <div className="actions">
-            <Link className="button" href={`/nps/${token}/survey`}>
-              Iniciar pesquisa
-            </Link>
+          <div className="hero-aside" aria-hidden="true">
+            <strong>3-5</strong>
+            <span>minutos</span>
           </div>
         </section>
       </div>
