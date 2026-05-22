@@ -896,6 +896,228 @@ button:focus-visible,
   margin-top: 7px;
 }
 
+.classic-page {
+  background:
+    linear-gradient(180deg, #ffffff 0, #f3f7fb 360px),
+    #f3f7fb;
+}
+
+.classic-frame {
+  width: min(1280px, 100%);
+  margin: 0 auto;
+}
+
+.classic-topbar {
+  margin-bottom: 14px;
+}
+
+.classic-sheet {
+  overflow: hidden;
+  padding: 30px 32px 26px;
+}
+
+.classic-accent {
+  height: 3px;
+  margin-bottom: 24px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+.classic-heading {
+  max-width: 880px;
+  margin-bottom: 22px;
+}
+
+.classic-heading h1 {
+  margin-bottom: 10px;
+  font-family: "Titillium Web", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.03;
+  white-space: normal;
+}
+
+.classic-heading p:not(.eyebrow) {
+  margin-bottom: 0;
+  color: #425466;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.classic-identity {
+  border: 1px solid #dce7f0;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fbfdff;
+}
+
+.classic-identity h2,
+.classic-section-title h2 {
+  margin-bottom: 0;
+  color: var(--primary);
+  font-size: 18px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.classic-identity-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.2fr 1fr 0.8fr 0.8fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.classic-identity-grid label {
+  min-width: 0;
+}
+
+.classic-identity-grid span {
+  display: block;
+  margin-bottom: 6px;
+  color: #334e68;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.classic-identity-grid input {
+  min-height: 42px;
+  border-radius: 6px;
+  padding: 10px 11px;
+  font-size: 14px;
+}
+
+.classic-sections {
+  display: grid;
+  gap: 22px;
+  margin-top: 26px;
+}
+
+.classic-section-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.classic-section-title span {
+  color: #425466;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.classic-table {
+  border-top: 2px solid #1f2937;
+  border-left: 1px solid #1f2937;
+  background: #fff;
+}
+
+.classic-row {
+  display: grid;
+  grid-template-columns: minmax(360px, 1fr) auto;
+  min-height: 35px;
+  border-right: 1px solid #1f2937;
+  border-bottom: 1px solid #1f2937;
+}
+
+.classic-question {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  border-right: 1px solid #1f2937;
+  padding: 6px 8px;
+  color: #102a43;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.classic-scale {
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+}
+
+.classic-score {
+  display: grid;
+  width: 30px;
+  min-height: 34px;
+  place-items: center;
+  border: 0;
+  border-left: 1px solid #1f2937;
+  border-radius: 0;
+  background: #fff;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.classic-score:first-child {
+  border-left: 0;
+}
+
+.classic-score:hover {
+  background: var(--primary-soft);
+}
+
+.classic-score.selected {
+  background: var(--primary);
+  color: #fff;
+}
+
+.classic-open-field {
+  display: grid;
+  grid-template-columns: 122px minmax(220px, 420px);
+  align-items: stretch;
+}
+
+.classic-open-field span {
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #1f2937;
+  padding: 6px 8px;
+  color: #334e68;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.classic-open-field textarea {
+  min-height: 42px;
+  border: 0;
+  border-radius: 0;
+  padding: 9px 10px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.classic-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 26px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+
+.classic-actions strong,
+.classic-actions span {
+  display: block;
+}
+
+.classic-actions strong {
+  color: var(--primary);
+  font-size: 16px;
+}
+
+.classic-actions span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.classic-error {
+  margin-bottom: 0;
+}
+
 @media (max-width: 720px) {
   .page-shell {
     padding: 18px 12px;
@@ -1019,5 +1241,35 @@ button:focus-visible,
 
   .button {
     width: 100%;
+  }
+
+  .classic-sheet {
+    padding: 24px 16px;
+  }
+
+  .classic-identity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .classic-table {
+    overflow-x: auto;
+  }
+
+  .classic-row {
+    grid-template-columns: minmax(280px, 1fr) auto;
+    min-width: 660px;
+  }
+
+  .classic-question {
+    font-size: 14px;
+  }
+
+  .classic-open-field {
+    grid-template-columns: 112px minmax(220px, 1fr);
+  }
+
+  .classic-actions {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
