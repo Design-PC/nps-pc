@@ -59,11 +59,17 @@ export default async function AdminDashboardPage() {
             />
           </div>
           <div className="admin-topbar-actions">
-            <Link className="button secondary" href="/nps/demo-prime-control">
+            <Link className="button secondary" href="/">
               Abrir pesquisa
             </Link>
-            <Link className="button" href="/api/admin/export.csv">
-              Exportar CSV
+            <Link className="button secondary" href="/api/admin/export.csv">
+              CSV
+            </Link>
+            <Link className="button secondary" href="/api/admin/export.xls">
+              Excel
+            </Link>
+            <Link className="button" href="/api/admin/export.pdf">
+              PDF
             </Link>
             <form action="/api/admin/logout" method="post">
               <button className="button ghost" type="submit">

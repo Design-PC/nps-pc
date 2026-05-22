@@ -31,6 +31,7 @@ Criar uma alternativa de pesquisa em página única, inspirada no formato direto
 - A versão registra visualização e conclusão com `variant: classic_one_page`.
 - As respostas são enviadas para o mesmo backend da plataforma.
 - O token de sessão público é gerado automaticamente para evitar bloqueio por resposta anterior salva no navegador.
+- O dashboard interno oferece exportação em CSV, Excel visual em tons de cinza e PDF executivo resumido.
 
 ## Uso recomendado
 
