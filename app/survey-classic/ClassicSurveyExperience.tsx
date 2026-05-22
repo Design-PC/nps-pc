@@ -16,6 +16,7 @@ type ClassicQuestion = {
 
 type ClassicSection = {
   id: string;
+  number: number;
   title: string;
   scale: string;
   questions: ClassicQuestion[];
@@ -53,6 +54,7 @@ const identityFields = [
 const sections: ClassicSection[] = [
   {
     id: "relacionamento-satisfacao",
+    number: 1,
     title: "Relacionamento e Satisfação",
     scale: "Escala: 10 = muito provável e 1 = nada provável",
     questions: [
@@ -72,6 +74,7 @@ const sections: ClassicSection[] = [
   },
   {
     id: "percepcao-valor",
+    number: 2,
     title: "Percepção de Valor",
     scale: "Escala: 10 = muito satisfeito e 1 = nada satisfeito",
     questions: [
@@ -112,6 +115,7 @@ const sections: ClassicSection[] = [
   },
   {
     id: "qualidade-operacional",
+    number: 3,
     title: "Qualidade Operacional",
     scale: "Escala: 10 = muito satisfeito e 1 = nada satisfeito",
     questions: [
@@ -150,6 +154,7 @@ const sections: ClassicSection[] = [
   },
   {
     id: "inovacao-futuro",
+    number: 4,
     title: "Inovação, Transformação e Futuro",
     scale: "Escala: 10 = muito satisfeito e 1 = nada satisfeito",
     questions: [
@@ -352,7 +357,10 @@ export function ClassicSurveyExperience() {
             {sections.map((section) => (
               <section className="classic-section" key={section.id} aria-labelledby={section.id}>
                 <div className="classic-section-title">
-                  <h2 id={section.id}>{section.title}</h2>
+                  <h2 id={section.id}>
+                    <span className="classic-section-number">{section.number}.</span>
+                    {section.title}
+                  </h2>
                   <span>{section.scale}</span>
                 </div>
 
