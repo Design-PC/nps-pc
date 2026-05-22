@@ -1069,7 +1069,7 @@ button:focus-visible,
 
 .classic-question-number {
   flex: 0 0 auto;
-  color: var(--accent);
+  color: var(--primary);
   font-weight: 800;
 }
 
