@@ -12,6 +12,7 @@ Criar uma alternativa de pesquisa em página única, inspirada no formato direto
 - Os campos abertos aparecem como áreas de resposta diretas, sem rótulos internos operacionais.
 - A identificação fica no topo, em formato compacto, com placeholders para evitar esforço de apagar textos preenchidos.
 - A versão principal em etapas continua preservada para comparação.
+- A hierarquia visual foi suavizada: perguntas com peso médio, bordas mais leves, seções mais claras e botões de nota com área de clique maior.
 
 ## Validação
 

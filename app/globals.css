@@ -913,7 +913,7 @@ button:focus-visible,
 
 .classic-sheet {
   overflow: hidden;
-  padding: 30px 32px 26px;
+  padding: 32px 34px 28px;
 }
 
 .classic-accent {
@@ -924,7 +924,7 @@ button:focus-visible,
 
 .classic-heading {
   max-width: 880px;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
 .classic-heading h1 {
@@ -945,15 +945,15 @@ button:focus-visible,
 .classic-identity {
   border: 1px solid #dce7f0;
   border-radius: 8px;
-  padding: 16px;
-  background: #fbfdff;
+  padding: 18px;
+  background: linear-gradient(180deg, #ffffff, #fbfdff);
 }
 
 .classic-identity h2,
 .classic-section-title h2 {
   margin-bottom: 0;
   color: var(--primary);
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.15;
   text-transform: uppercase;
 }
@@ -974,7 +974,7 @@ button:focus-visible,
   margin-bottom: 6px;
   color: #334e68;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .classic-identity-grid input {
@@ -986,70 +986,90 @@ button:focus-visible,
 
 .classic-sections {
   display: grid;
-  gap: 22px;
-  margin-top: 26px;
+  gap: 26px;
+  margin-top: 28px;
 }
 
 .classic-section-title {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 8px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
 }
 
 .classic-section-title span {
+  border: 1px solid #dce7f0;
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: #fbfdff;
   color: #425466;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .classic-table {
-  border-top: 2px solid #1f2937;
-  border-left: 1px solid #1f2937;
+  overflow: hidden;
+  border: 1px solid #cddbe8;
+  border-top: 3px solid var(--primary);
+  border-radius: 6px;
   background: #fff;
 }
 
 .classic-row {
   display: grid;
-  grid-template-columns: minmax(360px, 1fr) auto;
-  min-height: 35px;
-  border-right: 1px solid #1f2937;
-  border-bottom: 1px solid #1f2937;
+  grid-template-columns: minmax(420px, 1fr) auto;
+  min-height: 38px;
+  border-bottom: 1px solid #d7e2ec;
+}
+
+.classic-row:nth-child(even) {
+  background: #fbfdff;
+}
+
+.classic-row:last-child {
+  border-bottom: 0;
 }
 
 .classic-question {
   display: flex;
   align-items: center;
   min-width: 0;
-  border-right: 1px solid #1f2937;
-  padding: 7px 10px;
+  border-right: 1px solid #d7e2ec;
+  padding: 8px 12px;
   color: #102a43;
   font-size: 15px;
   font-weight: 500;
-  line-height: 1.32;
+  line-height: 1.35;
 }
 
 .classic-scale {
   display: grid;
-  grid-template-columns: repeat(10, 30px);
+  grid-template-columns: repeat(10, 34px);
 }
 
 .classic-score {
   display: grid;
-  width: 30px;
-  min-height: 34px;
+  width: 34px;
+  min-height: 38px;
   place-items: center;
   border: 0;
-  border-left: 1px solid #1f2937;
+  border-left: 1px solid #d7e2ec;
   border-radius: 0;
-  background: #fff;
+  background: transparent;
   color: var(--primary);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
 }
 
-.classic-score:first-child {
+.classic-score:first-child,
+.classic-row-open .classic-open-field {
   border-left: 0;
 }
 
@@ -1060,19 +1080,22 @@ button:focus-visible,
 .classic-score.selected {
   background: var(--primary);
   color: #fff;
+  box-shadow: inset 0 -3px 0 rgba(245, 130, 32, 0.95);
 }
 
 .classic-open-field {
   display: block;
-  width: min(420px, 34vw);
+  width: 340px;
 }
 
 .classic-open-field textarea {
-  min-height: 42px;
+  min-height: 46px;
   border: 0;
   border-radius: 0;
-  padding: 9px 10px;
+  padding: 10px 12px;
+  background: transparent;
   font-size: 14px;
+  line-height: 1.45;
   resize: vertical;
 }
 
@@ -1244,16 +1267,27 @@ button:focus-visible,
   }
 
   .classic-row {
-    grid-template-columns: minmax(280px, 1fr) auto;
-    min-width: 660px;
+    grid-template-columns: minmax(260px, 1fr);
+    min-width: 0;
   }
 
   .classic-question {
+    border-right: 0;
+    border-bottom: 1px solid #d7e2ec;
     font-size: 14px;
   }
 
+  .classic-scale {
+    grid-template-columns: repeat(5, minmax(44px, 1fr));
+  }
+
+  .classic-score {
+    width: auto;
+    min-height: 42px;
+  }
+
   .classic-open-field {
-    width: 300px;
+    width: 100%;
   }
 
   .classic-actions {
