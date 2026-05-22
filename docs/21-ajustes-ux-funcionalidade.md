@@ -8,7 +8,7 @@ Este registro documenta os ajustes realizados apos a avaliacao da interface publ
 - Remover o bloco lateral "3-5 minutos" da tela inicial, pois a informacao ja aparece no topo.
 - Preservar a tela inicial direta, leve e sem sensacao de pagina pesada.
 - Exibir apenas o tempo estimado no topo.
-- Posicionar o prazo de validade como nota discreta separada: "Disponivel ate 01/jun/26".
+- Posicionar o prazo de validade como nota discreta separada: "Disponivel ate 01/06/2026".
 - Manter os tres blocos claros: Rapida, Responsavel e Retomavel.
 - Reforcar que a resposta e identificada, sem criar medo ou excesso de formalidade.
 - Manter a promessa de etapas curtas e progresso salvo.
@@ -20,6 +20,8 @@ Este registro documenta os ajustes realizados apos a avaliacao da interface publ
 - O usuario final nao deve visualizar termos tecnicos como token ou link individual.
 - A identificacao do respondente deve acontecer por controle interno da plataforma.
 - Campos de identificacao devem usar placeholders, sem valores ficticios preenchidos.
+- A abertura publica da pesquisa nao deve reutilizar uma resposta antiga do navegador como criterio para bloquear o usuario.
+- E-mails devem ser validados como corporativos antes de avancar.
 - Quando o link nao e localizado, o usuario ve uma mensagem humana e controlada.
 - Foi criada uma tela global de erro com acao de recarregar.
 - Foi criada uma tela global de pagina nao encontrada com orientacao clara.
@@ -41,6 +43,7 @@ Clientes B2B precisam sentir que a pesquisa foi preparada com cuidado e que sua 
 - Menor percepcao de peso na tela inicial.
 - Melhor experiencia para clientes executivos ocupados.
 - Melhor governanca para envio via HubSpot, mantendo o controle tecnico invisivel para o cliente.
+- Menor risco de erro operacional causado por cache/localStorage durante testes e retomadas.
 
 ## Ponto de atencao para producao
 

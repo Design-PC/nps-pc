@@ -49,6 +49,38 @@ const demoIdentityValues: Record<string, string> = {
   identity_role: "Gestor(a)",
 };
 
+const publicEmailDomains = new Set([
+  "gmail.com",
+  "hotmail.com",
+  "outlook.com",
+  "live.com",
+  "icloud.com",
+  "yahoo.com",
+  "yahoo.com.br",
+  "bol.com.br",
+  "uol.com.br",
+  "terra.com.br",
+  "proton.me",
+  "protonmail.com",
+]);
+
+function getCorporateEmailError(emailValue: string) {
+  const email = emailValue.trim().toLowerCase();
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailPattern.test(email)) {
+    return "Informe um e-mail corporativo válido.";
+  }
+
+  const domain = email.split("@")[1];
+
+  if (!domain || publicEmailDomains.has(domain)) {
+    return "Use seu e-mail corporativo para continuar.";
+  }
+
+  return "";
+}
+
 function normalizeStoredAnswers(storedAnswers: SurveyAnswers) {
   const normalized: SurveyAnswers = {
     ...storedAnswers,
@@ -74,6 +106,13 @@ export function SurveyExperience({
   token,
 }: SurveyExperienceProps) {
   const router = useRouter();
+  const [sessionToken] = useState(() => {
+    if (showImmediately && typeof window !== "undefined") {
+      return `public-${crypto.randomUUID()}`;
+    }
+
+    return token;
+  });
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<SurveyAnswers>(prefilledIdentity);
   const [saveState, setSaveState] = useState("Progresso salvo");
@@ -115,7 +154,7 @@ export function SurveyExperience({
 
     async function hydrateSession() {
       try {
-        const response = await fetch(`/api/nps/session/${token}`, {
+        const response = await fetch(`/api/nps/session/${sessionToken}`, {
           cache: "no-store",
         });
 
@@ -135,7 +174,7 @@ export function SurveyExperience({
         }
 
         if (data.recipient?.status === "completed" || data.session?.completedAt) {
-          router.replace(completionPath ?? `/nps/${token}/complete`);
+          router.replace(completionPath ?? `/nps/${sessionToken}/complete`);
           return;
         }
 
@@ -146,7 +185,7 @@ export function SurveyExperience({
             ...normalizeStoredAnswers(data.session.answers ?? {}),
           });
           saveSession({
-            token,
+            token: sessionToken,
             currentStep: data.session.currentStep ?? 0,
             answers: data.session.answers ?? prefilledIdentity,
             startedAt: data.session.startedAt,
@@ -154,15 +193,15 @@ export function SurveyExperience({
           });
         }
 
-        await fetch(`/api/nps/session/${token}/start`, {
+        await fetch(`/api/nps/session/${sessionToken}/start`, {
           method: "POST",
         });
         setLoadState("ready");
       } catch {
-        const stored = loadSession(token);
+        const stored = loadSession(sessionToken);
 
         if (stored?.completedAt) {
-          router.replace(completionPath ?? `/nps/${token}/complete`);
+          router.replace(completionPath ?? `/nps/${sessionToken}/complete`);
           return;
         }
 
@@ -171,14 +210,14 @@ export function SurveyExperience({
           setAnswers({ ...prefilledIdentity, ...normalizeStoredAnswers(stored.answers) });
           setLoadState("ready");
           trackEvent("nps_survey_resumed", {
-            token,
+            token: sessionToken,
             last_step: stored.currentStep,
           });
           return;
         }
 
         const initialSession: StoredSurveySession = {
-          token,
+          token: sessionToken,
           currentStep: 0,
           answers: prefilledIdentity,
           startedAt: new Date().toISOString(),
@@ -189,7 +228,7 @@ export function SurveyExperience({
         setLoadState("ready");
       }
 
-      trackEvent("nps_survey_started", { token });
+      trackEvent("nps_survey_started", { token: sessionToken });
     }
 
     hydrateSession();
@@ -197,13 +236,13 @@ export function SurveyExperience({
     return () => {
       isMounted = false;
     };
-  }, [completionPath, router, token]);
+  }, [completionPath, router, sessionToken]);
 
   useEffect(() => {
     setStepStartedAt(Date.now());
     setError("");
     trackEvent("nps_step_viewed", {
-      token,
+      token: sessionToken,
       step_id: step.id,
       step_name: step.title,
       progress_percent: progress,
@@ -215,28 +254,28 @@ export function SurveyExperience({
         [question.id]: Date.now(),
       }));
       trackEvent("nps_question_viewed", {
-        token,
+        token: sessionToken,
         question_id: question.id,
         category: question.category,
         question_type: question.type,
       });
     });
-  }, [progress, step, token]);
+  }, [progress, sessionToken, step]);
 
   function persist(nextAnswers: SurveyAnswers, nextStep = currentStep) {
     setSaveState("Salvando...");
 
     const session: StoredSurveySession = {
-      token,
+      token: sessionToken,
       currentStep: nextStep,
       answers: nextAnswers,
-      startedAt: loadSession(token)?.startedAt ?? new Date().toISOString(),
+      startedAt: loadSession(sessionToken)?.startedAt ?? new Date().toISOString(),
       lastActivityAt: new Date().toISOString(),
     };
 
     saveSession(session);
 
-    fetch(`/api/nps/session/${token}/answer`, {
+    fetch(`/api/nps/session/${sessionToken}/answer`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -248,7 +287,7 @@ export function SurveyExperience({
     })
       .then((response) => {
         if (response.status === 409) {
-          router.replace(completionPath ?? `/nps/${token}/complete`);
+          router.replace(completionPath ?? `/nps/${sessionToken}/complete`);
         }
       })
       .catch(() => {
@@ -258,7 +297,7 @@ export function SurveyExperience({
     window.setTimeout(() => {
       setSaveState("Progresso salvo");
       trackEvent("nps_survey_autosaved", {
-        token,
+        token: sessionToken,
         step_id: step.id,
         answered_count: answeredCount,
       });
@@ -277,7 +316,7 @@ export function SurveyExperience({
     const startedAt = questionStartedAt[question.id] ?? Date.now();
 
     trackEvent("nps_question_answered", {
-      token,
+      token: sessionToken,
       question_id: question.id,
       category: question.category,
       answer_type: question.type,
@@ -285,15 +324,37 @@ export function SurveyExperience({
     });
   }
 
-  function isStepValid() {
-    return step.questions.every((question) => {
+  function getStepValidationError() {
+    const missingRequiredField = step.questions.find((question) => {
       if (!question.required) {
-        return true;
+        return false;
       }
 
       const answer = answers[question.id];
-      return answer !== undefined && String(answer).trim().length > 0;
+      return answer === undefined || String(answer).trim().length === 0;
     });
+
+    if (missingRequiredField) {
+      return "Preencha os campos obrigatórios desta etapa para continuar.";
+    }
+
+    if (currentStep === 0) {
+      const emailError = getCorporateEmailError(String(answers.identity_email ?? ""));
+
+      if (emailError) {
+        return emailError;
+      }
+
+      if (String(answers.identity_name ?? "").trim().length < 3) {
+        return "Informe seu nome completo.";
+      }
+
+      if (String(answers.identity_company ?? "").trim().length < 2) {
+        return "Informe o nome da empresa.";
+      }
+    }
+
+    return "";
   }
 
   function goBack() {
@@ -308,15 +369,17 @@ export function SurveyExperience({
   }
 
   async function goNext() {
-    if (!isStepValid()) {
-      setError("Preencha os campos obrigatórios desta etapa para continuar.");
+    const validationError = getStepValidationError();
+
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     const timeOnStep = Math.round((Date.now() - stepStartedAt) / 1000);
 
     trackEvent("nps_step_completed", {
-      token,
+      token: sessionToken,
       step_id: step.id,
       time_on_step_seconds: timeOnStep,
       answered_count: step.questions.filter((question) => answers[question.id])
@@ -324,9 +387,9 @@ export function SurveyExperience({
     });
 
     if (isLastStep) {
-      const session = loadSession(token);
+      const session = loadSession(sessionToken);
       saveSession({
-        token,
+        token: sessionToken,
         currentStep,
         answers,
         startedAt: session?.startedAt ?? new Date().toISOString(),
@@ -335,7 +398,7 @@ export function SurveyExperience({
       });
 
       try {
-        const response = await fetch(`/api/nps/session/${token}/complete`, {
+        const response = await fetch(`/api/nps/session/${sessionToken}/complete`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -346,7 +409,7 @@ export function SurveyExperience({
           }),
         });
         if (response.status === 409) {
-          router.replace(completionPath ?? `/nps/${token}/complete`);
+          router.replace(completionPath ?? `/nps/${sessionToken}/complete`);
           return;
         }
       } catch {
@@ -354,7 +417,7 @@ export function SurveyExperience({
       }
 
       trackEvent("nps_survey_completed", {
-        token,
+        token: sessionToken,
         total_answered: answeredCount,
         nps_score:
           typeof answers.nps_recommendation === "number"
@@ -362,7 +425,7 @@ export function SurveyExperience({
             : null,
       });
 
-      router.push(completionPath ?? `/nps/${token}/complete`);
+      router.push(completionPath ?? `/nps/${sessionToken}/complete`);
       return;
     }
 
@@ -524,6 +587,7 @@ function QuestionBlock({ question, answer, onChange }: QuestionBlockProps) {
         <input
           id={question.id}
           placeholder={identityPlaceholders[question.id] ?? ""}
+          type={question.id === "identity_email" ? "email" : "text"}
           value={String(answer ?? "")}
           onChange={(event) => onChange(event.target.value)}
         />

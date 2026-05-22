@@ -715,9 +715,11 @@ def add_ux_iteration(doc: Document) -> None:
     )
     rows = [
         ["Tela inicial", "Removido bloco lateral de 3 a 5 minutos; a informação permanece no topo.", "Evita redundância e melhora fluidez visual."],
-        ["Prazo", "Prazo de validade exibido como nota discreta: 01/jun/26.", "Cria senso de período ativo sem competir com o CTA."],
+        ["Prazo", "Prazo de validade exibido como nota discreta: 01/06/2026.", "Cria senso de período ativo sem competir com o CTA."],
         ["Blocos de confiança", "Mantidos três cards: Rápida, Responsável e Retomável.", "Preserva clareza e reduz ruído visual."],
         ["Identificação", "Campos usam placeholders, sem valores fictícios preenchidos.", "Evita o trabalho de apagar dados de exemplo."],
+        ["Validação", "E-mail deve ser corporativo antes de avançar.", "Protege a qualidade da base e reduz respostas fora do público-alvo."],
+        ["Retomada", "A pesquisa pública não deve bloquear por resposta antiga salva no navegador.", "Evita falso positivo de conclusão em testes e acessos compartilhados."],
         ["Tom", "Texto mais natural: a Prime Control quer ouvir o cliente.", "Reforça cuidado e convite direto."],
         ["Tela inicial", "Raiz do site exibe a landing real da pesquisa.", "Evita tela intermediária e reduz confusão."],
         ["Pesquisa não localizada", "Acesso inválido mostra mensagem controlada.", "Evita tela vazia, erro bruto ou criação de pesquisa indevida."],

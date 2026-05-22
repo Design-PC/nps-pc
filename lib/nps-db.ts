@@ -119,6 +119,10 @@ function assertKnownRecipient(token: string): never {
   throw new Error(token ? "NPS_RECIPIENT_NOT_FOUND" : "NPS_RECIPIENT_NOT_FOUND");
 }
 
+function canCreateRecipientFromPublicFlow(token: string) {
+  return token === demoToken || token.startsWith("public-");
+}
+
 function getSupabaseConfig() {
   const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -331,7 +335,7 @@ export async function getOrCreateSession(token: string) {
     let recipient = await getSupabaseRecipient(token);
 
     if (!recipient) {
-      if (token !== demoToken) {
+      if (!canCreateRecipientFromPublicFlow(token)) {
         assertKnownRecipient(token);
       }
 
@@ -366,7 +370,7 @@ export async function getOrCreateSession(token: string) {
   let recipient = db.recipients.find((item) => item.token === token);
 
   if (!recipient) {
-    if (token !== demoToken) {
+    if (!canCreateRecipientFromPublicFlow(token)) {
       assertKnownRecipient(token);
     }
 
@@ -387,11 +391,6 @@ export async function getOrCreateSession(token: string) {
       token,
       answers: {
         ...identityAnswers,
-        identity_name: recipient.name,
-        identity_email: recipient.email,
-        identity_company: recipient.company,
-        identity_area: recipient.area,
-        identity_role: recipient.role,
       },
       currentStep: recipient.currentStep,
       lastActivityAt: new Date().toISOString(),

@@ -43,7 +43,7 @@ export default function HomePage() {
           </div>
 
           <p className="helper validity-note">
-            Disponível até 01/jun/26.
+            {campaignInfo.validityLabel}.
           </p>
 
           <div className="actions">
