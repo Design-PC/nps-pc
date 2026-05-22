@@ -6,8 +6,10 @@ Criar uma alternativa de pesquisa em página única, inspirada no formato direto
 
 ## Decisão de experiência
 
-- A rota pública oficial é `/survey`.
+- A rota pública oficial é `/`.
+- A rota `/survey` permanece como caminho direto alternativo para a mesma experiência.
 - A rota `/survey-classic` permanece como alias da mesma experiência.
+- A landing anterior foi preservada como backup em `/landing-backup`.
 - O fluxo multi-step anterior foi preservado como backup em `/survey-backup`.
 - Todas as perguntas aparecem em uma única página.
 - As perguntas de escala usam quadradinhos ao lado da pergunta, na ordem visual `10 9 8 7 6 5 4 3 2 1`, conforme a referência enviada.
