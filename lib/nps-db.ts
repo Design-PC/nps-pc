@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { demoToken } from "@/lib/campaign";
 import { surveySteps, totalQuestionCount, type SurveyQuestion } from "@/lib/survey";
 
 export type AnswerValue = string | number;
@@ -87,7 +88,7 @@ const dataDir = path.join(process.cwd(), "data");
 const dbPath = path.join(dataDir, "nps-db.json");
 
 const demoRecipient: NpsRecipient = {
-  token: "demo-prime-control",
+  token: demoToken,
   name: "Cliente Prime Control",
   email: "cliente@empresa.com.br",
   company: "Empresa Cliente",
@@ -99,15 +100,23 @@ const demoRecipient: NpsRecipient = {
 };
 
 const identityAnswers: AnswerMap = {
-  identity_name: demoRecipient.name,
-  identity_email: demoRecipient.email,
-  identity_company: demoRecipient.company,
-  identity_area: demoRecipient.area,
-  identity_role: demoRecipient.role,
+  identity_name: "",
+  identity_email: "",
+  identity_company: "",
+  identity_area: "",
+  identity_role: "",
 };
 
 function isSupabaseConfigured() {
   return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
+export function isRecipientNotFoundError(error: unknown) {
+  return error instanceof Error && error.message === "NPS_RECIPIENT_NOT_FOUND";
+}
+
+function assertKnownRecipient(token: string): never {
+  throw new Error(token ? "NPS_RECIPIENT_NOT_FOUND" : "NPS_RECIPIENT_NOT_FOUND");
 }
 
 function getSupabaseConfig() {
@@ -322,6 +331,10 @@ export async function getOrCreateSession(token: string) {
     let recipient = await getSupabaseRecipient(token);
 
     if (!recipient) {
+      if (token !== demoToken) {
+        assertKnownRecipient(token);
+      }
+
       recipient = {
         ...demoRecipient,
         token,
@@ -339,11 +352,6 @@ export async function getOrCreateSession(token: string) {
         token,
         answers: {
           ...identityAnswers,
-          identity_name: recipient.name,
-          identity_email: recipient.email,
-          identity_company: recipient.company,
-          identity_area: recipient.area,
-          identity_role: recipient.role,
         },
         currentStep: recipient.currentStep,
         lastActivityAt: new Date().toISOString(),
@@ -358,6 +366,10 @@ export async function getOrCreateSession(token: string) {
   let recipient = db.recipients.find((item) => item.token === token);
 
   if (!recipient) {
+    if (token !== demoToken) {
+      assertKnownRecipient(token);
+    }
+
     recipient = {
       ...demoRecipient,
       token,

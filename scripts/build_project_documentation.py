@@ -346,7 +346,7 @@ def add_cover(doc: Document) -> None:
         ]
     )
 
-    add_para(doc, f"Versão: 1.2 | Atualizado em: {date.today().strftime('%d/%m/%Y')}", size=10, color=MUTED, before=18, after=34)
+    add_para(doc, f"Versão: 1.3 | Atualizado em: {date.today().strftime('%d/%m/%Y')}", size=10, color=MUTED, before=18, after=34)
     add_para(doc, "Documento consolidado a partir da auditoria, estratégia, PRD técnico, roadmap, backlog, operação de campanha e implementação inicial do MVP.", size=9.6, color=MUTED)
     doc.add_page_break()
 
@@ -381,7 +381,7 @@ def add_summary(doc: Document) -> None:
     for item in [
         "Preservar integralmente as perguntas existentes, sem reescrita ou enviesamento.",
         "Usar experiência multi-step para reduzir sobrecarga cognitiva.",
-        "Salvar progresso e permitir retomada por token individual.",
+        "Salvar progresso e permitir retomada por controle interno invisível para o cliente.",
         "Gerar planilha executiva e dashboard operacional com respostas e comportamento.",
         "Integrar Microsoft Clarity para mapas de calor e replay de sessão.",
         "Preparar integração com HubSpot para envio, segmentação e follow-up.",
@@ -422,7 +422,7 @@ def add_toc(doc: Document) -> None:
         ["7", "PRD técnico", "Frontend, backend, banco, segurança e integrações."],
         ["8", "Roadmap e backlog", "Fases de implementação e prioridades."],
         ["9", "Operação da campanha", "Processo, papéis, rituais e métricas de sucesso."],
-        ["10", "MVP atual e governança", "O que já foi feito, próximos passos e atualização contínua."],
+        ["10", "MVP atual e governança", "O que já foi feito, ajustes de UX, próximos passos e atualização contínua."],
     ]
     add_table(doc, ["#", "Seção", "Finalidade"], rows, widths=[0.45, 2.35, 3.7])
 
@@ -459,7 +459,7 @@ def add_experience(doc: Document) -> None:
     )
     rows = [
         ["0", "Landing", "Propósito, tempo estimado, confiança e CTA."],
-        ["1", "Identificação", "Dados pré-preenchidos via HubSpot/token."],
+        ["1", "Identificação", "Dados pré-preenchidos via HubSpot e controle interno."],
         ["2", "Relacionamento e Satisfação", "NPS e motivo da nota."],
         ["3", "Percepção de Valor", "Avaliação de valor, relevância e resultados."],
         ["4", "Qualidade Operacional", "Entregas, prazos, clareza, atendimento e resposta."],
@@ -519,7 +519,7 @@ def add_analytics(doc: Document) -> None:
         ["Microsoft Clarity", "Mapas de calor, replay de sessão, rage clicks, dead clicks, comportamento mobile.", "Entender como o usuário se comporta visualmente."],
         ["PostHog", "Eventos, funis, coortes, tempo por etapa, abandono por pergunta.", "Entender onde o funil quebra."],
         ["GA4", "Origem, dispositivo, navegador, UTM e tráfego.", "Entender de onde o usuário veio."],
-        ["Banco próprio", "Respostas, sessões, tokens, progresso e eventos.", "Garantir confiabilidade e exportação."],
+        ["Banco próprio", "Respostas, sessões, identificação interna, progresso e eventos.", "Garantir confiabilidade e exportação."],
         ["Dashboard", "Participação, abandono, NPS, clientes silenciosos e risco.", "Apoiar liderança e CS."],
         ["Planilha", "CSV/XLSX de respostas e comportamento.", "Permitir análise, auditoria e compartilhamento."],
     ]
@@ -540,14 +540,14 @@ def add_analytics(doc: Document) -> None:
         ["nps_question_answered", "Resposta registrada", "question_id, category, time_to_answer"],
         ["nps_step_completed", "Avanço de etapa", "step_id, time_on_step, answered_count"],
         ["nps_survey_abandoned", "Saída/inatividade", "last_step, last_question, elapsed_time"],
-        ["nps_survey_resumed", "Retorno pelo token", "last_step, days_since_last_activity"],
+        ["nps_survey_resumed", "Retorno à pesquisa", "last_step, days_since_last_activity"],
         ["nps_survey_completed", "Envio final", "total_time, nps_score, completion_path"],
     ]
     add_table(doc, ["Evento", "Trigger", "Properties"], rows, widths=[2.15, 1.85, 2.5])
     add_heading(doc, "Planilha de respostas", 2)
     add_para(doc, "A exportação CSV/XLSX deve conter respostas e sinais comportamentais, não apenas nota final.")
     for item in [
-        "Identificação: empresa, contato, cargo, área e token/campaign_id.",
+        "Identificação: empresa, contato, cargo, área e campaign_id.",
         "Status: convidado, abriu, clicou, iniciou, abandonou, retomou ou concluiu.",
         "Respostas: nota NPS, escalas por bloco e campos abertos.",
         "Comportamento: etapa abandonada, tempo por etapa, tempo total e dispositivo.",
@@ -584,21 +584,21 @@ def add_technical_prd(doc: Document) -> None:
         ["CRM", "HubSpot", "Envio, segmentação, status e lembretes."],
         ["Analytics", "Clarity, PostHog, GA4", "Comportamento visual, funil e origem."],
         ["Dashboard", "Power BI, Metabase ou dashboard interno", "Leitura executiva e operacional."],
-        ["Segurança", "Token seguro, HTTPS, LGPD", "Controle de acesso e minimização de dados."],
+        ["Segurança", "Controle interno seguro, HTTPS, LGPD", "Controle de acesso e minimização de dados."],
     ]
     add_table(doc, ["Camada", "Tecnologia", "Responsabilidade"], rows, widths=[1.35, 2.3, 2.85])
     add_heading(doc, "Rotas e componentes", 2)
     for item in [
-        "/nps/[token]: landing personalizada.",
-        "/nps/[token]/survey: wizard da pesquisa.",
-        "/nps/[token]/complete: confirmação de conclusão.",
+        "/: landing pública da campanha.",
+        "/survey: wizard da pesquisa.",
+        "/complete: confirmação de conclusão.",
         "Componentes: SurveyLayout, ProgressBar, RatingScale, OpenTextQuestion, AutosaveIndicator, ResumeBanner e CompletionState.",
     ]:
         add_bullet(doc, item)
     add_heading(doc, "Modelo de dados", 2)
     rows = [
         ["nps_campaigns", "Campanha, período, status e versão."],
-        ["nps_recipients", "Contato, empresa, token hash e status da jornada."],
+        ["nps_recipients", "Contato, empresa, identificador interno e status da jornada."],
         ["nps_sessions", "Sessão, etapa atual, progresso e tempo total."],
         ["nps_questions", "Perguntas aprovadas, tipo, categoria e ordem."],
         ["nps_answers", "Respostas numéricas/textuais, tempo e revisitas."],
@@ -607,7 +607,7 @@ def add_technical_prd(doc: Document) -> None:
     add_table(doc, ["Tabela", "Finalidade"], rows, widths=[2.0, 4.5])
     add_heading(doc, "LGPD e segurança", 2)
     for item in [
-        "Token aleatório, único e com expiração; armazenar hash do token, não token puro.",
+        "Identificador interno aleatório, único e com expiração; não expor esse controle na interface do cliente.",
         "HTTPS obrigatório e acesso restrito ao dashboard.",
         "Mascaramento de dados sensíveis no Microsoft Clarity.",
         "Separação entre análise agregada e visualização individual autorizada.",
@@ -620,7 +620,7 @@ def add_roadmap(doc: Document) -> None:
     add_heading(doc, "10. Roadmap, backlog e plano de ação", 1)
     rows = [
         ["Fase 0", "Alinhamento", "Congelar perguntas, regras metodológicas, campos HubSpot e permissões."],
-        ["Fase 1", "MVP de alta conversão", "Landing, wizard, token, autosave, retomada e persistência."],
+        ["Fase 1", "MVP de alta conversão", "Landing, wizard, controle interno, autosave, retomada e persistência."],
         ["Fase 2", "Analytics comportamental", "Clarity, PostHog, eventos, heatmaps e session replay."],
         ["Fase 3", "Dashboard e planilha", "Funil, abandono, clientes silenciosos e exportação CSV/XLSX."],
         ["Fase 4", "Integração HubSpot", "Status no CRM, segmentos e lembretes comportamentais."],
@@ -635,7 +635,7 @@ def add_roadmap(doc: Document) -> None:
         "Gerar exportação CSV/XLSX.",
         "Criar dashboard interno inicial.",
         "Integrar Microsoft Clarity com mascaramento de dados.",
-        "Preparar tokens individuais para envio via HubSpot.",
+        "Preparar controle interno de respondentes para envio via HubSpot.",
     ]:
         add_bullet(doc, item)
 
@@ -652,7 +652,7 @@ def add_operation(doc: Document) -> None:
     add_table(doc, ["Papel", "Responsabilidade"], rows, widths=[2.0, 4.5])
     add_heading(doc, "Cadência recomendada", 2)
     for item in [
-        "Antes da campanha: validar base HubSpot, tokens, tracking, dashboard e QA mobile.",
+        "Antes da campanha: validar base HubSpot, identificação interna, tracking, dashboard e QA mobile.",
         "Durante a campanha: daily de 15 minutos para funil, abandono, contas estratégicas e bloqueios.",
         "Após a campanha: relatório executivo, análise de temas, clientes de risco e backlog de otimização.",
     ]:
@@ -661,16 +661,16 @@ def add_operation(doc: Document) -> None:
 
 def add_mvp_status(doc: Document) -> None:
     add_heading(doc, "12. Status do MVP atual", 1)
-    add_para(doc, "A primeira versão navegável já foi criada para validar a experiência do respondente e agora já possui uma camada funcional de dados para MVP local.")
+    add_para(doc, "A primeira versão navegável já foi criada para validar a experiência do respondente e agora possui uma camada funcional de dados, dashboard interno, Clarity, exportação CSV e estados controlados para acessos incorretos.")
     rows = [
-        ["Implementado", "Next.js, landing, fluxo multi-step, perguntas preservadas, autosave, APIs internas, persistência local, dashboard MVP, exportação CSV, logo e identidade visual."],
-        ["Ainda pendente", "Banco de produção, autenticação do admin, importação de respondentes, XLSX, HubSpot, PostHog, GA4 e publicação no subdomínio."],
+        ["Implementado", "Next.js, landing compacta, fluxo multi-step, perguntas preservadas, autosave, APIs internas, Supabase preparado, dashboard interno protegido, exportação CSV, logo, identidade visual, Clarity e estados controlados para erro/link inválido."],
+        ["Ainda pendente", "Importação oficial de respondentes, XLSX, HubSpot, PostHog, GA4, subdomínio nps.primecontrol.com.br, refinamento final do dashboard e validação de campanha."],
         ["Decisão técnica", "Evoluir o MVP para plataforma própria, usando Typeform apenas como benchmark ou fallback emergencial."],
     ]
     add_table(doc, ["Status", "Descrição"], rows, widths=[1.65, 4.85])
     add_heading(doc, "URLs de referência no ambiente local", 2)
     for item in [
-        "Home técnica do protótipo: http://localhost:3000",
+        "Raiz da plataforma: http://localhost:3000",
         "Landing do respondente: http://localhost:3000/nps/demo-prime-control",
         "Pesquisa multi-step: http://localhost:3000/nps/demo-prime-control/survey",
         "Dashboard interno: http://localhost:3000/admin",
@@ -683,12 +683,12 @@ def add_current_implementation(doc: Document) -> None:
     add_heading(doc, "13. Implementação atual: dados, dashboard e Clarity", 1)
     add_para(
         doc,
-        "A plataforma deixou de ser apenas um protótipo visual e passou a salvar respostas em uma camada de dados local para MVP. Essa camada será substituída por Supabase/PostgreSQL em produção, mantendo a mesma lógica de APIs.",
+        "A plataforma deixou de ser apenas um protótipo visual e passou a operar como MVP funcional, com experiência pública, persistência de dados, dashboard interno protegido, exportação CSV e integração preparada com Microsoft Clarity.",
     )
     rows = [
         ["APIs internas", "Sessão, início, salvamento de respostas, conclusão e eventos."],
-        ["Persistência MVP", "Arquivo local JSON para acelerar validação funcional."],
-        ["Dashboard interno", "Visão de convidados, iniciados, concluídos, completion rate e abandono por etapa."],
+        ["Persistência MVP", "Supabase em produção quando configurado; fallback local JSON para validação funcional."],
+        ["Dashboard interno", "Visão de convidados, participação, conclusão, abandono, NPS parcial, score de fricção, clientes silenciosos e exportação."],
         ["Exportação CSV", "Arquivo com identificação, status, datas, etapa e respostas."],
         ["Clarity", "Script preparado via NEXT_PUBLIC_CLARITY_PROJECT_ID."],
     ]
@@ -704,8 +704,39 @@ def add_current_implementation(doc: Document) -> None:
         add_bullet(doc, item)
 
 
+def add_ux_iteration(doc: Document) -> None:
+    add_heading(doc, "14. Ajustes recentes de UX e funcionalidade", 1)
+    add_callout(
+        doc,
+        "Direção aprovada",
+        "Manter a experiência pública direta, leve e executiva. A tela inicial deve caber na primeira dobra sempre que possível, sem parecer uma landing pesada ou uma tela técnica.",
+        fill=LIGHT_BLUE,
+        accent=BLUE,
+    )
+    rows = [
+        ["Tela inicial", "Removido bloco lateral de 3 a 5 minutos; a informação permanece no topo.", "Evita redundância e melhora fluidez visual."],
+        ["Prazo", "Prazo de validade exibido como nota discreta: 01/jun/26.", "Cria senso de período ativo sem competir com o CTA."],
+        ["Blocos de confiança", "Mantidos três cards: Rápida, Responsável e Retomável.", "Preserva clareza e reduz ruído visual."],
+        ["Identificação", "Campos usam placeholders, sem valores fictícios preenchidos.", "Evita o trabalho de apagar dados de exemplo."],
+        ["Tom", "Texto mais natural: a Prime Control quer ouvir o cliente.", "Reforça cuidado e convite direto."],
+        ["Tela inicial", "Raiz do site exibe a landing real da pesquisa.", "Evita tela intermediária e reduz confusão."],
+        ["Pesquisa não localizada", "Acesso inválido mostra mensagem controlada.", "Evita tela vazia, erro bruto ou criação de pesquisa indevida."],
+        ["Erro global", "Criada tela de instabilidade com ação de recarregar.", "Reduz ansiedade e melhora recuperação."],
+    ]
+    add_table(doc, ["Ponto", "Decisão", "Racional"], rows, widths=[1.35, 2.65, 2.5])
+    add_heading(doc, "Regras de aceite da experiência pública", 2)
+    for item in [
+        "A landing não deve exibir informações técnicas internas.",
+        "O topo deve mostrar apenas o tempo estimado; a validade deve aparecer de forma discreta no conteúdo.",
+        "A primeira dobra deve conter logo, contexto, benefício, transparência e CTA.",
+        "Acesso inexistente não deve criar uma nova pesquisa automaticamente.",
+        "O cliente deve sempre receber uma orientação clara, mesmo em erro ou link incompleto.",
+    ]:
+        add_bullet(doc, item)
+
+
 def add_governance(doc: Document) -> None:
-    add_heading(doc, "14. Governança e atualização contínua", 1)
+    add_heading(doc, "15. Governança e atualização contínua", 1)
     add_para(
         doc,
         "Este documento deve acompanhar a evolução do projeto. Sempre que uma decisão de produto, UX, dados, tecnologia ou operação for tomada, a documentação executiva deve ser atualizada para manter uma fonte única de entendimento.",
@@ -755,6 +786,7 @@ def build() -> None:
     add_operation(doc)
     add_mvp_status(doc)
     add_current_implementation(doc)
+    add_ux_iteration(doc)
     add_governance(doc)
 
     doc.save(DOCX_PATH)

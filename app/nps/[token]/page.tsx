@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { campaignInfo } from "@/lib/campaign";
 
 type LandingPageProps = {
   params: Promise<{
@@ -20,39 +21,43 @@ export default async function LandingPage({ params }: LandingPageProps) {
               src="/brand/prime-control-logo.png"
             />
           </div>
-          <span className="status-pill">Tempo estimado: 3 a 5 minutos</span>
+          <div className="topbar-meta">
+            <span className="status-pill">{campaignInfo.estimatedTimeLabel}</span>
+          </div>
         </header>
 
-        <section className="panel hero compact-hero">
-          <div className="hero-copy">
-            <p className="eyebrow">Pesquisa de Satisfação | NPS | Maio 2026</p>
-            <h1>Sua percepção sobre a parceria Prime Control.</h1>
-            <p className="lead">
-              Esta pesquisa ajuda a direcionar melhorias na relação, nas entregas
-              e na geração de valor para o seu negócio.
-            </p>
+        <section className="panel hero">
+          <p className="eyebrow">{campaignInfo.name}</p>
+          <h1>A Prime Control quer ouvir você.</h1>
+          <p className="lead">
+            Sua percepção ajuda a Prime Control a priorizar melhorias,
+            fortalecer a parceria e direcionar ações para gerar mais valor ao
+            seu negócio.
+          </p>
 
-            <div className="trust-strip" aria-label="Informações da pesquisa">
-              <span>Etapas curtas</span>
-              <span>Progresso salvo</span>
-              <span>Resposta identificada</span>
+          <div className="hero-grid refined-hero-grid">
+            <div className="info-tile">
+              <strong>Rápida</strong>
+              <span>A experiência foi organizada em etapas curtas.</span>
             </div>
-
-            <p className="helper">
-              As respostas serão analisadas com responsabilidade pela Prime
-              Control para orientar ações de melhoria contínua.
-            </p>
-
-            <div className="actions">
-              <Link className="button" href={`/nps/${token}/survey`}>
-                Iniciar pesquisa
-              </Link>
+            <div className="info-tile">
+              <strong>Responsável</strong>
+              <span>As respostas orientam a melhoria contínua da parceria.</span>
+            </div>
+            <div className="info-tile">
+              <strong>Retomável</strong>
+              <span>O progresso pode ser salvo para continuar depois.</span>
             </div>
           </div>
 
-          <div className="hero-aside" aria-hidden="true">
-            <strong>3-5</strong>
-            <span>minutos</span>
+          <p className="helper validity-note">
+            Disponível até 01/jun/26.
+          </p>
+
+          <div className="actions">
+            <Link className="button" href={`/nps/${token}/survey`}>
+              Iniciar pesquisa
+            </Link>
           </div>
         </section>
       </div>

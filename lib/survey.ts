@@ -60,8 +60,7 @@ export const surveySteps: SurveyStep[] = [
     id: "identificacao",
     title: "Identificação",
     eyebrow: "Etapa 1",
-    description:
-      "Confirmamos alguns dados para associar corretamente sua resposta à parceria com a Prime Control.",
+    description: "",
     questions: identityQuestions,
   },
   {

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { campaignInfo } from "@/lib/campaign";
 import {
   getStepByIndex,
   identityQuestions,
@@ -19,9 +20,28 @@ import { trackEvent } from "@/lib/tracking";
 
 type SurveyExperienceProps = {
   token: string;
+  completionPath?: string;
+  landingPath?: string;
+  showImmediately?: boolean;
 };
 
 const prefilledIdentity: SurveyAnswers = {
+  identity_name: "",
+  identity_email: "",
+  identity_company: "",
+  identity_area: "",
+  identity_role: "",
+};
+
+const identityPlaceholders: Record<string, string> = {
+  identity_name: "Seu nome",
+  identity_email: "seu.email@empresa.com.br",
+  identity_company: "Nome da empresa",
+  identity_area: "Sua área",
+  identity_role: "Seu cargo",
+};
+
+const demoIdentityValues: Record<string, string> = {
   identity_name: "Cliente Prime Control",
   identity_email: "cliente@empresa.com.br",
   identity_company: "Empresa Cliente",
@@ -30,21 +50,37 @@ const prefilledIdentity: SurveyAnswers = {
 };
 
 function normalizeStoredAnswers(storedAnswers: SurveyAnswers) {
-  return {
+  const normalized: SurveyAnswers = {
     ...storedAnswers,
     identity_area:
       storedAnswers.identity_area === "Operacoes"
         ? "Operações"
         : storedAnswers.identity_area,
   };
+
+  Object.entries(demoIdentityValues).forEach(([key, demoValue]) => {
+    if (normalized[key] === demoValue) {
+      normalized[key] = "";
+    }
+  });
+
+  return normalized;
 }
 
-export function SurveyExperience({ token }: SurveyExperienceProps) {
+export function SurveyExperience({
+  completionPath,
+  landingPath,
+  showImmediately = false,
+  token,
+}: SurveyExperienceProps) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<SurveyAnswers>(prefilledIdentity);
   const [saveState, setSaveState] = useState("Progresso salvo");
   const [error, setError] = useState("");
+  const [loadState, setLoadState] = useState<"loading" | "ready" | "unavailable">(
+    showImmediately ? "ready" : "loading",
+  );
   const [stepStartedAt, setStepStartedAt] = useState(Date.now());
   const [questionStartedAt, setQuestionStartedAt] = useState<
     Record<string, number>
@@ -82,6 +118,16 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
         const response = await fetch(`/api/nps/session/${token}`, {
           cache: "no-store",
         });
+
+        if (response.status === 404) {
+          setLoadState("unavailable");
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error("Unable to load survey session.");
+        }
+
         const data = await response.json();
 
         if (!isMounted) {
@@ -89,7 +135,7 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
         }
 
         if (data.recipient?.status === "completed" || data.session?.completedAt) {
-          router.replace(`/nps/${token}/complete`);
+          router.replace(completionPath ?? `/nps/${token}/complete`);
           return;
         }
 
@@ -111,17 +157,19 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
         await fetch(`/api/nps/session/${token}/start`, {
           method: "POST",
         });
+        setLoadState("ready");
       } catch {
         const stored = loadSession(token);
 
         if (stored?.completedAt) {
-          router.replace(`/nps/${token}/complete`);
+          router.replace(completionPath ?? `/nps/${token}/complete`);
           return;
         }
 
         if (stored) {
           setCurrentStep(stored.currentStep);
           setAnswers({ ...prefilledIdentity, ...normalizeStoredAnswers(stored.answers) });
+          setLoadState("ready");
           trackEvent("nps_survey_resumed", {
             token,
             last_step: stored.currentStep,
@@ -138,6 +186,7 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
         };
 
         saveSession(initialSession);
+        setLoadState("ready");
       }
 
       trackEvent("nps_survey_started", { token });
@@ -148,7 +197,7 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
     return () => {
       isMounted = false;
     };
-  }, [router, token]);
+  }, [completionPath, router, token]);
 
   useEffect(() => {
     setStepStartedAt(Date.now());
@@ -199,7 +248,7 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
     })
       .then((response) => {
         if (response.status === 409) {
-          router.replace(`/nps/${token}/complete`);
+          router.replace(completionPath ?? `/nps/${token}/complete`);
         }
       })
       .catch(() => {
@@ -248,6 +297,11 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
   }
 
   function goBack() {
+    if (currentStep === 0 && landingPath) {
+      router.push(landingPath);
+      return;
+    }
+
     const nextStep = Math.max(currentStep - 1, 0);
     setCurrentStep(nextStep);
     persist(answers, nextStep);
@@ -292,7 +346,7 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
           }),
         });
         if (response.status === 409) {
-          router.replace(`/nps/${token}/complete`);
+          router.replace(completionPath ?? `/nps/${token}/complete`);
           return;
         }
       } catch {
@@ -308,13 +362,73 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
             : null,
       });
 
-      router.push(`/nps/${token}/complete`);
+      router.push(completionPath ?? `/nps/${token}/complete`);
       return;
     }
 
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
     persist(answers, nextStep);
+  }
+
+  if (loadState === "loading") {
+    return (
+      <main className="page-shell landing-shell">
+        <div className="survey-frame landing-frame">
+          <header className="topbar">
+            <div className="brand">
+              <img
+                alt="Prime Control"
+                className="brand-logo"
+                src="/brand/prime-control-logo.png"
+              />
+            </div>
+            <span className="status-pill">{campaignInfo.estimatedTimeLabel}</span>
+          </header>
+
+          <section className="panel state-panel">
+            <p className="eyebrow">Pesquisa NPS</p>
+            <h1>Preparando sua pesquisa.</h1>
+            <p className="lead">
+              Estamos preparando a experiência para registrar suas respostas com
+              segurança.
+            </p>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
+  if (loadState === "unavailable") {
+    return (
+      <main className="page-shell landing-shell">
+        <div className="survey-frame landing-frame">
+          <header className="topbar">
+            <div className="brand">
+              <img
+                alt="Prime Control"
+                className="brand-logo"
+                src="/brand/prime-control-logo.png"
+              />
+            </div>
+            <span className="status-pill">{campaignInfo.validityLabel}</span>
+          </header>
+
+          <section className="panel state-panel">
+            <p className="eyebrow">Pesquisa não localizada</p>
+            <h1>Não conseguimos abrir esta pesquisa.</h1>
+            <p className="lead">
+              Houve um problema para localizar a pesquisa solicitada. Atualize a
+              página ou acione seu ponto de contato na Prime Control.
+            </p>
+            <p className="helper">
+              Caso precise de apoio, fale com seu ponto de contato na Prime
+              Control.
+            </p>
+          </section>
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -328,7 +442,10 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
               src="/brand/prime-control-logo.png"
             />
           </div>
-          <span className="status-pill">Tempo estimado: 3 a 5 minutos</span>
+          <div className="topbar-meta">
+            <span className="status-pill">{campaignInfo.estimatedTimeLabel}</span>
+            <span className="status-pill subtle">{campaignInfo.validityLabel}</span>
+          </div>
         </header>
 
         <section className="panel survey-card">
@@ -347,14 +464,7 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
           <div className="survey-body">
             <p className="eyebrow">{step.eyebrow}</p>
             <h2>{step.title}</h2>
-            <p className="lead">{step.description}</p>
-            {currentStep === 0 ? (
-              <p className="identity-note">
-                Esta pesquisa é identificada para que as respostas sejam
-                analisadas no contexto correto da parceria.
-              </p>
-            ) : null}
-
+            {step.description ? <p className="lead">{step.description}</p> : null}
             <div
               className={`question-stack ${
                 currentStep === 0 ? "identity-stack" : ""
@@ -384,6 +494,10 @@ export function SurveyExperience({ token }: SurveyExperienceProps) {
                 <button className="button secondary" type="button" onClick={goBack}>
                   Voltar
                 </button>
+              ) : landingPath ? (
+                <button className="button secondary" type="button" onClick={goBack}>
+                  Voltar ao início
+                </button>
               ) : null}
               <button className="button" type="button" onClick={goNext}>
                 {isLastStep ? "Enviar pesquisa" : "Continuar"}
@@ -409,6 +523,7 @@ function QuestionBlock({ question, answer, onChange }: QuestionBlockProps) {
         <label htmlFor={question.id}>{question.label}</label>
         <input
           id={question.id}
+          placeholder={identityPlaceholders[question.id] ?? ""}
           value={String(answer ?? "")}
           onChange={(event) => onChange(event.target.value)}
         />
