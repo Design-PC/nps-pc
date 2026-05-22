@@ -1056,8 +1056,8 @@ button:focus-visible,
   width: 34px;
   min-height: 38px;
   place-items: center;
-  border: 0;
-  border-left: 1px solid #d7e2ec;
+  border: 1px solid transparent;
+  border-left-color: #d7e2ec;
   border-radius: 0;
   background: transparent;
   color: var(--primary);
@@ -1156,6 +1156,8 @@ button:focus-visible,
   .classic-score {
     width: auto;
     min-height: 42px;
+    border-color: #cddbe8;
+    background: #ffffff;
   }
 
   .classic-open-field {
@@ -1322,6 +1324,8 @@ button:focus-visible,
   .classic-score {
     width: auto;
     min-height: 42px;
+    border-color: #cddbe8;
+    background: #ffffff;
   }
 
   .classic-open-field {
