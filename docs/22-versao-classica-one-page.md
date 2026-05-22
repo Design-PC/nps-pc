@@ -12,7 +12,7 @@ Criar uma alternativa de pesquisa em página única, inspirada no formato direto
 - A landing anterior foi preservada como backup em `/landing-backup`.
 - O fluxo multi-step anterior foi preservado como backup em `/survey-backup`.
 - Todas as perguntas aparecem em uma única página.
-- As seções são numeradas de 1 a 4 para melhorar orientação e sensação de progresso sem aumentar a percepção de volume das perguntas.
+- As perguntas são numeradas de forma discreta para facilitar orientação e referência interna.
 - As perguntas de escala usam quadradinhos ao lado da pergunta, na ordem visual `10 9 8 7 6 5 4 3 2 1`, conforme a referência enviada.
 - Os campos abertos aparecem como áreas de resposta diretas, sem rótulos internos operacionais.
 - A identificação fica no topo, em formato compacto, com placeholders para evitar esforço de apagar textos preenchidos.

@@ -971,11 +971,6 @@ button:focus-visible,
   text-transform: uppercase;
 }
 
-.classic-section-number {
-  color: var(--accent);
-  font-weight: 800;
-}
-
 .classic-identity-grid {
   display: grid;
   grid-template-columns: 1.1fr 1.2fr 1fr 0.8fr 0.8fr;
@@ -1061,6 +1056,7 @@ button:focus-visible,
 .classic-question {
   display: flex;
   align-items: center;
+  gap: 8px;
   min-width: 0;
   border-right: 1px solid #d7e2ec;
   padding: 8px 12px;
@@ -1069,6 +1065,12 @@ button:focus-visible,
   font-weight: 500;
   line-height: 1.35;
   overflow-wrap: break-word;
+}
+
+.classic-question-number {
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-weight: 800;
 }
 
 .classic-scale {

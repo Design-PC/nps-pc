@@ -16,7 +16,6 @@ type ClassicQuestion = {
 
 type ClassicSection = {
   id: string;
-  number: number;
   title: string;
   scale: string;
   questions: ClassicQuestion[];
@@ -54,7 +53,6 @@ const identityFields = [
 const sections: ClassicSection[] = [
   {
     id: "relacionamento-satisfacao",
-    number: 1,
     title: "Relacionamento e Satisfação",
     scale: "Escala: 10 = muito provável e 1 = nada provável",
     questions: [
@@ -74,7 +72,6 @@ const sections: ClassicSection[] = [
   },
   {
     id: "percepcao-valor",
-    number: 2,
     title: "Percepção de Valor",
     scale: "Escala: 10 = muito satisfeito e 1 = nada satisfeito",
     questions: [
@@ -115,7 +112,6 @@ const sections: ClassicSection[] = [
   },
   {
     id: "qualidade-operacional",
-    number: 3,
     title: "Qualidade Operacional",
     scale: "Escala: 10 = muito satisfeito e 1 = nada satisfeito",
     questions: [
@@ -154,7 +150,6 @@ const sections: ClassicSection[] = [
   },
   {
     id: "inovacao-futuro",
-    number: 4,
     title: "Inovação, Transformação e Futuro",
     scale: "Escala: 10 = muito satisfeito e 1 = nada satisfeito",
     questions: [
@@ -305,6 +300,8 @@ export function ClassicSurveyExperience() {
     }
   }
 
+  let questionNumber = 0;
+
   return (
     <main className="page-shell classic-page">
       <div className="classic-frame">
@@ -357,50 +354,54 @@ export function ClassicSurveyExperience() {
             {sections.map((section) => (
               <section className="classic-section" key={section.id} aria-labelledby={section.id}>
                 <div className="classic-section-title">
-                  <h2 id={section.id}>
-                    <span className="classic-section-number">{section.number}.</span>
-                    {section.title}
-                  </h2>
+                  <h2 id={section.id}>{section.title}</h2>
                   <span>{section.scale}</span>
                 </div>
 
                 <div className="classic-table" role="group" aria-label={section.title}>
-                  {section.questions.map((question) => (
-                    <div
-                      className={`classic-row ${
-                        question.type === "text" ? "classic-row-open" : ""
-                      }`}
-                      key={question.id}
-                    >
-                      <div className="classic-question">{question.label}</div>
+                  {section.questions.map((question) => {
+                    questionNumber += 1;
 
-                      {question.type === "rating" ? (
-                        <div className="classic-scale" aria-label={`Nota para: ${question.label}`}>
-                          {scoreOptions.map((score) => (
-                            <button
-                              aria-pressed={answers[question.id] === score}
-                              className={`classic-score ${
-                                answers[question.id] === score ? "selected" : ""
-                              }`}
-                              key={score}
-                              onClick={() => updateAnswer(question.id, score)}
-                              type="button"
-                            >
-                              {score}
-                            </button>
-                          ))}
+                    return (
+                      <div
+                        className={`classic-row ${
+                          question.type === "text" ? "classic-row-open" : ""
+                        }`}
+                        key={question.id}
+                      >
+                        <div className="classic-question">
+                          <span className="classic-question-number">{questionNumber}.</span>
+                          <span>{question.label}</span>
                         </div>
-                      ) : (
-                        <label className="classic-open-field">
-                          <textarea
-                            value={String(answers[question.id] ?? "")}
-                            placeholder="Escreva sua resposta, se desejar"
-                            onChange={(event) => updateAnswer(question.id, event.target.value)}
-                          />
-                        </label>
-                      )}
-                    </div>
-                  ))}
+
+                        {question.type === "rating" ? (
+                          <div className="classic-scale" aria-label={`Nota para: ${question.label}`}>
+                            {scoreOptions.map((score) => (
+                              <button
+                                aria-pressed={answers[question.id] === score}
+                                className={`classic-score ${
+                                  answers[question.id] === score ? "selected" : ""
+                                }`}
+                                key={score}
+                                onClick={() => updateAnswer(question.id, score)}
+                                type="button"
+                              >
+                                {score}
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          <label className="classic-open-field">
+                            <textarea
+                              value={String(answers[question.id] ?? "")}
+                              placeholder="Escreva sua resposta, se desejar"
+                              onChange={(event) => updateAnswer(question.id, event.target.value)}
+                            />
+                          </label>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </section>
             ))}
