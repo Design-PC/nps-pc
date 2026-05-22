@@ -21,8 +21,9 @@ Criar uma alternativa de pesquisa em página única, inspirada no formato direto
 
 ## Validação
 
-- Nome, e-mail corporativo, empresa, área e cargo são obrigatórios.
+- Nome, e-mail corporativo, empresa e cargo são obrigatórios.
 - E-mails pessoais são bloqueados para manter a qualidade dos dados B2B.
+- O campo de e-mail exibe feedback visual quando o endereço informado é inválido ou pessoal.
 - Todas as perguntas de escala são obrigatórias.
 - Campos abertos permanecem opcionais, preservando menor esforço percebido.
 

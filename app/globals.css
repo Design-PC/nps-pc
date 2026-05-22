@@ -973,7 +973,7 @@ button:focus-visible,
 
 .classic-identity-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1.2fr 1fr 0.8fr 0.8fr;
+  grid-template-columns: 1.1fr 1.2fr 1fr 0.9fr;
   gap: 10px;
   margin-top: 12px;
 }
@@ -995,6 +995,20 @@ button:focus-visible,
   border-radius: 6px;
   padding: 10px 11px;
   font-size: 14px;
+}
+
+.input-invalid {
+  border-color: var(--danger) !important;
+  background: #fff7f7;
+}
+
+.field-error {
+  display: block;
+  margin-top: 5px;
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .classic-sections {

@@ -46,7 +46,6 @@ const identityFields = [
     type: "email",
   },
   { id: "identity_company", label: "Empresa", placeholder: "Empresa" },
-  { id: "identity_area", label: "Área", placeholder: "Área" },
   { id: "identity_role", label: "Cargo", placeholder: "Cargo" },
 ];
 
@@ -208,6 +207,7 @@ export function ClassicSurveyExperience() {
   const [answers, setAnswers] = useState<Answers>({});
   const [sessionToken] = useState(createSessionToken);
   const [error, setError] = useState("");
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
 
   const requiredRatings = useMemo(
@@ -234,6 +234,10 @@ export function ClassicSurveyExperience() {
   function updateAnswer(questionId: string, value: AnswerValue) {
     setAnswers((current) => ({ ...current, [questionId]: value }));
     setError("");
+  }
+
+  function markTouched(questionId: string) {
+    setTouchedFields((current) => ({ ...current, [questionId]: true }));
   }
 
   function validateAnswers() {
@@ -301,6 +305,9 @@ export function ClassicSurveyExperience() {
   }
 
   let questionNumber = 0;
+  const emailValue = String(answers.identity_email ?? "");
+  const shouldShowEmailError =
+    touchedFields.identity_email && emailValue.trim().length > 0 && !isCorporateEmail(emailValue);
 
   return (
     <main className="page-shell classic-page">
@@ -339,12 +346,27 @@ export function ClassicSurveyExperience() {
                 <label key={field.id}>
                   <span>{field.label}</span>
                   <input
+                    className={
+                      field.id === "identity_email" && shouldShowEmailError ? "input-invalid" : ""
+                    }
                     type={field.type ?? "text"}
                     value={String(answers[field.id] ?? "")}
                     placeholder={field.placeholder}
                     onChange={(event) => updateAnswer(field.id, event.target.value)}
+                    onBlur={() => markTouched(field.id)}
                     autoComplete={field.id === "identity_email" ? "email" : "on"}
+                    aria-invalid={field.id === "identity_email" && shouldShowEmailError}
+                    aria-describedby={
+                      field.id === "identity_email" && shouldShowEmailError
+                        ? "identity-email-error"
+                        : undefined
+                    }
                   />
+                  {field.id === "identity_email" && shouldShowEmailError ? (
+                    <small className="field-error" id="identity-email-error">
+                      Use um e-mail corporativo válido.
+                    </small>
+                  ) : null}
                 </label>
               ))}
             </div>
