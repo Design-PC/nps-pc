@@ -1130,6 +1130,39 @@ button:focus-visible,
   margin-bottom: 0;
 }
 
+@media (max-width: 980px) {
+  .classic-heading h1 {
+    white-space: normal;
+  }
+
+  .classic-identity-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .classic-row {
+    grid-template-columns: minmax(260px, 1fr);
+    min-width: 0;
+  }
+
+  .classic-question {
+    border-right: 0;
+    border-bottom: 1px solid #d7e2ec;
+  }
+
+  .classic-scale {
+    grid-template-columns: repeat(5, minmax(48px, 1fr));
+  }
+
+  .classic-score {
+    width: auto;
+    min-height: 42px;
+  }
+
+  .classic-open-field {
+    width: 100%;
+  }
+}
+
 @media (max-width: 720px) {
   .page-shell {
     padding: 18px 12px;

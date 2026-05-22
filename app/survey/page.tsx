@@ -1,13 +1,5 @@
-import { demoToken } from "@/lib/campaign";
-import { SurveyExperience } from "@/app/nps/[token]/survey/SurveyExperience";
+import { ClassicSurveyExperience } from "@/app/survey-classic/ClassicSurveyExperience";
 
 export default function PublicSurveyPage() {
-  return (
-    <SurveyExperience
-      completionPath="/complete"
-      landingPath="/"
-      showImmediately
-      token={demoToken}
-    />
-  );
+  return <ClassicSurveyExperience />;
 }

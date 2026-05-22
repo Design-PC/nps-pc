@@ -6,12 +6,14 @@ Criar uma alternativa de pesquisa em página única, inspirada no formato direto
 
 ## Decisão de experiência
 
-- A rota pública de teste é `/survey-classic`.
+- A rota pública oficial é `/survey`.
+- A rota `/survey-classic` permanece como alias da mesma experiência.
+- O fluxo multi-step anterior foi preservado como backup em `/survey-backup`.
 - Todas as perguntas aparecem em uma única página.
 - As perguntas de escala usam quadradinhos ao lado da pergunta, na ordem visual `10 9 8 7 6 5 4 3 2 1`, conforme a referência enviada.
 - Os campos abertos aparecem como áreas de resposta diretas, sem rótulos internos operacionais.
 - A identificação fica no topo, em formato compacto, com placeholders para evitar esforço de apagar textos preenchidos.
-- A versão principal em etapas continua preservada para comparação.
+- A versão em página única passa a ser a experiência principal da campanha.
 - A hierarquia visual foi suavizada: perguntas com peso médio, bordas mais leves, seções mais claras e botões de nota com área de clique maior.
 
 ## Validação
