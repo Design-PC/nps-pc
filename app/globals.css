@@ -923,16 +923,17 @@ button:focus-visible,
 }
 
 .classic-heading {
-  max-width: 880px;
+  max-width: 1040px;
   margin-bottom: 24px;
 }
 
 .classic-heading h1 {
-  margin-bottom: 10px;
+  max-width: none;
+  margin-bottom: 12px;
   font-family: "Titillium Web", Inter, ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(32px, 4vw, 48px);
-  line-height: 1.03;
-  white-space: normal;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.08;
+  white-space: nowrap;
 }
 
 .classic-heading p:not(.eyebrow) {
@@ -1256,6 +1257,10 @@ button:focus-visible,
 
   .classic-sheet {
     padding: 24px 16px;
+  }
+
+  .classic-heading h1 {
+    white-space: normal;
   }
 
   .classic-identity-grid {

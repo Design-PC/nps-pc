@@ -323,11 +323,10 @@ export function ClassicSurveyExperience() {
         <section className="panel classic-sheet" aria-labelledby="classic-title">
           <div className="classic-accent" />
           <div className="classic-heading">
-            <p className="eyebrow">Pesquisa de Satisfação | NPS | Maio 2026</p>
-            <h1 id="classic-title">A Prime Control quer ouvir você.</h1>
+            <h1 id="classic-title">Pesquisa de Satisfação | NPS | Maio 2026</h1>
             <p>
-              Responda de forma objetiva. As perguntas estão em uma única página, com
-              seleção direta da nota ao lado de cada item.
+              Sua percepção ajuda a Prime Control a priorizar melhorias e gerar mais
+              valor ao seu negócio.
             </p>
           </div>
 
