@@ -36,8 +36,9 @@ function hasValidSessionCookie(request: NextRequest, username: string, password:
 export function proxy(request: NextRequest) {
   const username = process.env.ADMIN_USERNAME;
   const password = process.env.ADMIN_PASSWORD;
+  const pathname = request.nextUrl.pathname;
 
-  if (!isProtectedPath(request.nextUrl.pathname) || isPublicAdminPath(request.nextUrl.pathname)) {
+  if (!isProtectedPath(pathname) || isPublicAdminPath(pathname)) {
     return NextResponse.next();
   }
 
@@ -65,6 +66,13 @@ export function proxy(request: NextRequest) {
     if (providedUsername === username && providedPassword === password) {
       return NextResponse.next();
     }
+  }
+
+  if (pathname.startsWith("/admin")) {
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = "/admin/login";
+    loginUrl.searchParams.set("next", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return new NextResponse("Authentication required", {

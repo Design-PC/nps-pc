@@ -31,7 +31,8 @@ export default function AdminLoginPage() {
       return;
     }
 
-    router.push("/admin");
+    const nextPath = new URL(window.location.href).searchParams.get("next");
+    router.push(nextPath ?? "/admin");
     router.refresh();
   }
 
