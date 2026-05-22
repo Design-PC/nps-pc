@@ -32,6 +32,42 @@ Protegem:
 
 Essas rotas contem dados identificados e nao devem ficar publicas.
 
+Em producao, se essas variaveis nao estiverem configuradas, a area interna deve ficar indisponivel por seguranca.
+
+## Links Para Teste
+
+### Respondente
+
+Enviar para quem vai testar a pesquisa:
+
+```text
+https://<dominio-vercel-ou-subdominio>/nps/demo-prime-control
+```
+
+No dominio final:
+
+```text
+https://nps.primecontrol.com.br/nps/<token-do-contato>
+```
+
+### Area Interna
+
+Usar apenas internamente:
+
+```text
+https://<dominio-vercel-ou-subdominio>/admin
+```
+
+Essa rota exige usuario e senha via `ADMIN_USERNAME` e `ADMIN_PASSWORD`.
+
+### Exportacao
+
+Usar apenas internamente:
+
+```text
+https://<dominio-vercel-ou-subdominio>/api/admin/export.csv
+```
+
 ## Observacao Importante Sobre Vercel
 
 A persistencia atual do MVP usa arquivo local:
@@ -86,4 +122,3 @@ Nao usar para campanha real ate que exista:
 - Validar `/admin` protegido.
 - Validar exportacao CSV.
 - Validar Clarity recebendo sessoes.
-

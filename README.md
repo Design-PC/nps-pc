@@ -34,6 +34,7 @@ Transformar a pesquisa atual, hoje percebida como um formulário corporativo est
 16. [Decisões de arquitetura e próximos passos](./docs/16-decisoes-de-arquitetura.md)
 17. [Camada de dados, dashboard e Clarity](./docs/17-camada-dados-dashboard-clarity.md)
 18. [GitHub e deploy na Vercel](./docs/18-github-vercel-deploy.md)
+19. [Supabase e Clarity para produção](./docs/19-supabase-clarity-producao.md)
 
 ## Stack Recomendada
 

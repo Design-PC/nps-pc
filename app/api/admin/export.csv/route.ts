@@ -1,6 +1,8 @@
 import { readDb } from "@/lib/nps-db";
 import { surveySteps } from "@/lib/survey";
 
+export const dynamic = "force-dynamic";
+
 function csvEscape(value: unknown) {
   const text = value === null || value === undefined ? "" : String(value);
   return `"${text.replaceAll('"', '""')}"`;
@@ -52,4 +54,3 @@ export async function GET() {
     },
   });
 }
-

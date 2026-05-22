@@ -89,11 +89,23 @@ Para ativar:
 2. Copiar o Project ID.
 3. Criar `.env.local` com o Project ID.
 4. Reiniciar o servidor.
+5. Na Vercel, adicionar a mesma variavel em Project Settings > Environment Variables.
 
 Exemplo:
 
 ```text
 NEXT_PUBLIC_CLARITY_PROJECT_ID=xxxxxxxxxx
+```
+
+O que falta receber da Prime Control:
+
+- Project ID do Microsoft Clarity; ou
+- script completo gerado pelo Clarity.
+
+Se for enviado o script completo, o dado essencial dentro dele e o ID apos:
+
+```text
+https://www.clarity.ms/tag/PROJECT_ID
 ```
 
 ## Observacao Tecnica
@@ -105,4 +117,3 @@ data/nps-db.json
 ```
 
 Em producao, essa camada deve ser substituida por Supabase/PostgreSQL.
-

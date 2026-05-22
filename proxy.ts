@@ -10,8 +10,18 @@ export function proxy(request: NextRequest) {
   const username = process.env.ADMIN_USERNAME;
   const password = process.env.ADMIN_PASSWORD;
 
-  if (!isProtectedPath(request.nextUrl.pathname) || !username || !password) {
+  if (!isProtectedPath(request.nextUrl.pathname)) {
     return NextResponse.next();
+  }
+
+  if (!username || !password) {
+    if (process.env.NODE_ENV === "development") {
+      return NextResponse.next();
+    }
+
+    return new NextResponse("Admin credentials are not configured", {
+      status: 503,
+    });
   }
 
   const authorization = request.headers.get("authorization");
@@ -37,4 +47,3 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: ["/admin/:path*", "/api/admin/:path*"],
 };
-
