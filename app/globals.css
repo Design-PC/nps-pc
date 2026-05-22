@@ -1023,11 +1023,11 @@ button:focus-visible,
   align-items: center;
   min-width: 0;
   border-right: 1px solid #1f2937;
-  padding: 6px 8px;
+  padding: 7px 10px;
   color: #102a43;
   font-size: 15px;
-  font-weight: 700;
-  line-height: 1.25;
+  font-weight: 500;
+  line-height: 1.32;
 }
 
 .classic-scale {
@@ -1046,7 +1046,7 @@ button:focus-visible,
   background: #fff;
   color: var(--primary);
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .classic-score:first-child {
@@ -1063,20 +1063,8 @@ button:focus-visible,
 }
 
 .classic-open-field {
-  display: grid;
-  grid-template-columns: 122px minmax(220px, 420px);
-  align-items: stretch;
-}
-
-.classic-open-field span {
-  display: flex;
-  align-items: center;
-  border-right: 1px solid #1f2937;
-  padding: 6px 8px;
-  color: #334e68;
-  font-size: 14px;
-  font-weight: 700;
-  white-space: nowrap;
+  display: block;
+  width: min(420px, 34vw);
 }
 
 .classic-open-field textarea {
@@ -1265,7 +1253,7 @@ button:focus-visible,
   }
 
   .classic-open-field {
-    grid-template-columns: 112px minmax(220px, 1fr);
+    width: 300px;
   }
 
   .classic-actions {

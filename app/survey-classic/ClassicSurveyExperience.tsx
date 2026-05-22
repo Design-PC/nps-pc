@@ -385,10 +385,9 @@ export function ClassicSurveyExperience() {
                         </div>
                       ) : (
                         <label className="classic-open-field">
-                          <span>(Campo aberto)</span>
                           <textarea
                             value={String(answers[question.id] ?? "")}
-                            placeholder="Escreva sua resposta, se desejar."
+                            placeholder="Escreva sua resposta, se desejar"
                             onChange={(event) => updateAnswer(question.id, event.target.value)}
                           />
                         </label>

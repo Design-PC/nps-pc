@@ -9,7 +9,7 @@ Criar uma alternativa de pesquisa em página única, inspirada no formato direto
 - A rota pública de teste é `/survey-classic`.
 - Todas as perguntas aparecem em uma única página.
 - As perguntas de escala usam quadradinhos ao lado da pergunta, na ordem visual `10 9 8 7 6 5 4 3 2 1`, conforme a referência enviada.
-- Os campos abertos aparecem como `(Campo aberto)`, com área de resposta no mesmo bloco visual.
+- Os campos abertos aparecem como áreas de resposta diretas, sem rótulos internos operacionais.
 - A identificação fica no topo, em formato compacto, com placeholders para evitar esforço de apagar textos preenchidos.
 - A versão principal em etapas continua preservada para comparação.
 
