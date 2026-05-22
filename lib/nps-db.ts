@@ -544,13 +544,67 @@ export function getAnsweredCount(answers: AnswerMap) {
 
 export async function getDashboardData() {
   const db = await readDb();
+  const now = Date.now();
   const totalRecipients = db.recipients.length;
   const started = db.recipients.filter((recipient) => recipient.startedAt).length;
   const completed = db.recipients.filter((recipient) => recipient.status === "completed").length;
   const inProgress = db.recipients.filter((recipient) =>
     ["started", "in_progress"].includes(recipient.status),
   ).length;
+  const invited = db.recipients.filter((recipient) => !recipient.startedAt).length;
   const completionRate = started > 0 ? Math.round((completed / started) * 100) : 0;
+  const participationRate = totalRecipients > 0 ? Math.round((started / totalRecipients) * 100) : 0;
+  const abandonmentRate = started > 0 ? Math.round(((started - completed) / started) * 100) : 0;
+
+  const sessionsWithCompletionTime = db.sessions
+    .filter((session) => session.startedAt && session.completedAt)
+    .map((session) =>
+      Math.max(
+        0,
+        (new Date(session.completedAt as string).getTime() -
+          new Date(session.startedAt as string).getTime()) /
+          60000,
+      ),
+    );
+  const averageCompletionMinutes =
+    sessionsWithCompletionTime.length > 0
+      ? Math.round(
+          sessionsWithCompletionTime.reduce((sum, minutes) => sum + minutes, 0) /
+            sessionsWithCompletionTime.length,
+        )
+      : 0;
+
+  const npsScores = db.sessions
+    .map((session) => Number(session.answers.nps_recommendation))
+    .filter((score) => Number.isFinite(score));
+  const promoters = npsScores.filter((score) => score >= 9).length;
+  const passives = npsScores.filter((score) => score >= 7 && score <= 8).length;
+  const detractors = npsScores.filter((score) => score <= 6).length;
+  const npsScore =
+    npsScores.length > 0
+      ? Math.round(((promoters - detractors) / npsScores.length) * 100)
+      : null;
+
+  const hesitationEvents = db.events
+    .filter((event) => event.eventName === "nps_question_answered")
+    .map((event) => Number(event.properties.time_to_answer_seconds))
+    .filter((seconds) => Number.isFinite(seconds));
+  const averageQuestionSeconds =
+    hesitationEvents.length > 0
+      ? Math.round(
+          hesitationEvents.reduce((sum, seconds) => sum + seconds, 0) /
+            hesitationEvents.length,
+        )
+      : 0;
+
+  const frictionScore = Math.min(
+    100,
+    Math.round(
+      abandonmentRate * 0.55 +
+        (totalRecipients > 0 ? (invited / totalRecipients) * 100 * 0.25 : 0) +
+        Math.min(20, averageQuestionSeconds / 2),
+    ),
+  );
 
   const stepDropoff = surveySteps.map((step, index) => {
     const reached = db.recipients.filter((recipient) => recipient.currentStep >= index).length;
@@ -562,29 +616,87 @@ export async function getDashboardData() {
       stepName: step.title,
       reached,
       stoppedHere,
+      dropoffRate: reached > 0 ? Math.round((stoppedHere / reached) * 100) : 0,
     };
   });
 
+  const categoryAverages = surveySteps
+    .flatMap((step) => step.questions)
+    .filter((question) => question.type === "rating")
+    .reduce(
+      (categories, question) => {
+        const values = db.sessions
+          .map((session) => Number(session.answers[question.id]))
+          .filter((value) => Number.isFinite(value));
+
+        if (!categories[question.category]) {
+          categories[question.category] = { total: 0, count: 0 };
+        }
+
+        categories[question.category].total += values.reduce((sum, value) => sum + value, 0);
+        categories[question.category].count += values.length;
+
+        return categories;
+      },
+      {} as Record<string, { total: number; count: number }>,
+    );
+
+  const categoryScores = Object.entries(categoryAverages).map(([category, score]) => ({
+    category,
+    average: score.count > 0 ? Number((score.total / score.count).toFixed(1)) : null,
+  }));
+
   const rows = db.recipients.map((recipient) => {
     const session = db.sessions.find((item) => item.token === recipient.token);
+    const lastActivityAt = recipient.lastActivityAt ?? session?.lastActivityAt;
+    const hoursSinceActivity = lastActivityAt
+      ? (now - new Date(lastActivityAt).getTime()) / 3600000
+      : null;
+    const npsValue = Number(session?.answers.nps_recommendation);
+    const riskLevel =
+      recipient.status === "completed" && Number.isFinite(npsValue) && npsValue <= 6
+        ? "Alto"
+        : recipient.status !== "completed" && hoursSinceActivity !== null && hoursSinceActivity >= 24
+          ? "Médio"
+          : !recipient.startedAt
+            ? "Silencioso"
+            : "Normal";
+
     return {
       ...recipient,
       answeredCount: session ? getAnsweredCount(session.answers) : 0,
       totalQuestionCount,
       npsScore: session?.answers.nps_recommendation ?? null,
+      lastActivityAt,
+      riskLevel,
     };
   });
 
   return {
     summary: {
       totalRecipients,
+      invited,
       started,
       inProgress,
       completed,
+      participationRate,
       completionRate,
+      abandonmentRate,
+      averageCompletionMinutes,
+      npsScore,
+      frictionScore,
+      averageQuestionSeconds,
+    },
+    npsDistribution: {
+      promoters,
+      passives,
+      detractors,
+      total: npsScores.length,
     },
     stepDropoff,
+    categoryScores,
     rows,
+    latestEvents: db.events.slice(0, 10),
   };
 }
 

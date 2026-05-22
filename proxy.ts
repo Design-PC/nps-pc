@@ -1,16 +1,43 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const protectedPaths = ["/admin", "/api/admin"];
+const publicAdminPaths = ["/admin/login", "/api/admin/login"];
+const sessionCookieName = "prime_nps_admin_session";
 
 function isProtectedPath(pathname: string) {
   return protectedPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+}
+
+function isPublicAdminPath(pathname: string) {
+  return publicAdminPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+}
+
+function hasValidSessionCookie(request: NextRequest, username: string, password: string) {
+  const cookieValue = request.cookies.get(sessionCookieName)?.value;
+
+  if (!cookieValue) {
+    return false;
+  }
+
+  try {
+    const decoded = atob(cookieValue);
+    const [providedUsername, providedPassword, expiresAt] = decoded.split(":");
+
+    return (
+      providedUsername === username &&
+      providedPassword === password &&
+      Number(expiresAt) > Date.now()
+    );
+  } catch {
+    return false;
+  }
 }
 
 export function proxy(request: NextRequest) {
   const username = process.env.ADMIN_USERNAME;
   const password = process.env.ADMIN_PASSWORD;
 
-  if (!isProtectedPath(request.nextUrl.pathname)) {
+  if (!isProtectedPath(request.nextUrl.pathname) || isPublicAdminPath(request.nextUrl.pathname)) {
     return NextResponse.next();
   }
 
@@ -22,6 +49,10 @@ export function proxy(request: NextRequest) {
     return new NextResponse("Admin credentials are not configured", {
       status: 503,
     });
+  }
+
+  if (hasValidSessionCookie(request, username, password)) {
+    return NextResponse.next();
   }
 
   const authorization = request.headers.get("authorization");
