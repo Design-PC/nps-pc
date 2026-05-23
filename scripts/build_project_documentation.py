@@ -546,13 +546,14 @@ def add_analytics(doc: Document) -> None:
     ]
     add_table(doc, ["Evento", "Trigger", "Properties"], rows, widths=[2.15, 1.85, 2.5])
     add_heading(doc, "Planilha de respostas", 2)
-    add_para(doc, "As exportações CSV, Excel e PDF devem conter respostas, indicadores e sinais comportamentais, não apenas nota final.")
+    add_para(doc, "As exportações CSV, Excel e PDF devem conter respostas, indicadores e sinais comportamentais, não apenas nota final. Para a planilha oficial em OneDrive/SharePoint, a recomendação é manter o Supabase como base principal e atualizar uma aba chamada Base automática via Microsoft Graph API.")
     for item in [
         "Identificação: empresa, contato, cargo e campaign_id.",
         "Status: convidado, abriu, clicou, iniciou, abandonou, retomou ou concluiu.",
         "Respostas: nota NPS, escalas por bloco e campos abertos.",
         "Comportamento: etapa abandonada, tempo por etapa, tempo total e dispositivo.",
         "Qualidade: campos abertos preenchidos, tamanho de comentário e resposta parcial.",
+        "Excel corporativo: arquivo Respostas NPS 2026 no SharePoint/OneDrive, com aba Base automática para integração e abas separadas para resumo executivo, dicionário e configurações.",
     ]:
         add_bullet(doc, item)
 
@@ -626,7 +627,7 @@ def add_roadmap(doc: Document) -> None:
         ["Fase 0", "Alinhamento", "Congelar perguntas, regras metodológicas, campos HubSpot e permissões."],
         ["Fase 1", "MVP de alta conversão", "Pesquisa one-page oficial, backup multi-step, controle interno e persistência."],
         ["Fase 2", "Analytics comportamental", "Clarity, PostHog, eventos, heatmaps e session replay."],
-        ["Fase 3", "Dashboard e exportações", "Funil, abandono, clientes silenciosos e exportação CSV/Excel/PDF."],
+        ["Fase 3", "Dashboard e exportações", "Funil, abandono, clientes silenciosos, exportação CSV/Excel/PDF e modelo oficial de planilha SharePoint."],
         ["Fase 4", "Integração HubSpot", "Status no CRM, segmentos e lembretes comportamentais."],
         ["Fase 5", "Otimização CRO", "Testes A/B de landing, CTA e agrupamento, sem influenciar nota."],
         ["Fase 6", "Inteligência preditiva", "Score de risco, temas qualitativos e alertas para CS."],
@@ -636,7 +637,7 @@ def add_roadmap(doc: Document) -> None:
     for item in [
         "Criar banco e APIs de sessão/respostas.",
         "Persistir respostas reais e progresso.",
-        "Gerar exportações CSV, Excel visual e PDF executivo.",
+        "Gerar exportações CSV, Excel visual, PDF executivo e modelo oficial para OneDrive/SharePoint.",
         "Criar dashboard interno inicial.",
         "Integrar Microsoft Clarity com mascaramento de dados.",
         "Preparar controle interno de respondentes para envio via HubSpot.",
@@ -668,7 +669,7 @@ def add_mvp_status(doc: Document) -> None:
     add_para(doc, "A primeira versão navegável já foi criada para validar a experiência do respondente e agora possui pesquisa oficial em página única, camada funcional de dados, dashboard interno, Clarity, exportações CSV/Excel/PDF e estados controlados para acessos incorretos.")
     rows = [
         ["Implementado", "Next.js, pesquisa one-page oficial na raiz, perguntas preservadas, perguntas numeradas, identificação simplificada, validação visual de e-mail corporativo, APIs internas, Supabase preparado, dashboard interno protegido, exportações CSV/Excel/PDF, logo, identidade visual, Clarity e backups de landing/multi-step."],
-        ["Ainda pendente", "Importação oficial de respondentes, integração HubSpot, PostHog, GA4, subdomínio nps.primecontrol.com.br, refinamento final do dashboard e validação de campanha."],
+        ["Ainda pendente", "Importação oficial de respondentes, integração HubSpot, integração Microsoft Graph com SharePoint/OneDrive, PostHog, GA4, subdomínio nps.primecontrol.com.br, refinamento final do dashboard e validação de campanha."],
         ["Decisão técnica", "Evoluir o MVP para plataforma própria, usando Typeform apenas como benchmark ou fallback emergencial."],
     ]
     add_table(doc, ["Status", "Descrição"], rows, widths=[1.65, 4.85])
@@ -696,7 +697,7 @@ def add_current_implementation(doc: Document) -> None:
         ["APIs internas", "Sessão, início, salvamento de respostas, conclusão e eventos."],
         ["Persistência MVP", "Supabase em produção quando configurado; fallback local JSON para validação funcional."],
         ["Dashboard interno", "Visão de convidados, participação, conclusão, abandono, NPS parcial, score de fricção, clientes silenciosos e exportações."],
-        ["Exportações", "CSV bruto, Excel visual em tons de cinza e PDF executivo resumido."],
+        ["Exportações", "CSV bruto, Excel visual em tons de cinza, PDF executivo resumido e modelo oficial de planilha SharePoint/OneDrive."],
         ["Clarity", "Script preparado via NEXT_PUBLIC_CLARITY_PROJECT_ID."],
     ]
     add_table(doc, ["Entrega", "Descrição"], rows, widths=[1.65, 4.85])
