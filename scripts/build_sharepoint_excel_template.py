@@ -4,6 +4,7 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.chart import BarChart, Reference
 from openpyxl.formatting.rule import CellIsRule
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
@@ -156,9 +157,21 @@ def build_base(ws):
     ws.freeze_panes = "A2"
     ws.auto_filter.ref = f"A1:{get_column_letter(len(BASE_HEADERS))}1"
     ws.append(BASE_HEADERS)
+    ws.append(["" for _ in BASE_HEADERS])
     style_header(ws[1])
     ws.row_dimensions[1].height = 42
-    style_table(ws, 1, 1, 1, len(BASE_HEADERS))
+    ws.row_dimensions[2].height = 24
+    style_table(ws, 1, 2, 1, len(BASE_HEADERS))
+    table_ref = f"A1:{get_column_letter(len(BASE_HEADERS))}2"
+    table = Table(displayName="TabelaRespostasNPS", ref=table_ref)
+    table.tableStyleInfo = TableStyleInfo(
+        name="TableStyleMedium2",
+        showFirstColumn=False,
+        showLastColumn=False,
+        showRowStripes=True,
+        showColumnStripes=False,
+    )
+    ws.add_table(table)
 
     widths = {
         "A": 18, "B": 18, "C": 22, "D": 16, "E": 14, "F": 22, "G": 26, "H": 24,

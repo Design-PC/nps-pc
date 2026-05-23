@@ -546,14 +546,14 @@ def add_analytics(doc: Document) -> None:
     ]
     add_table(doc, ["Evento", "Trigger", "Properties"], rows, widths=[2.15, 1.85, 2.5])
     add_heading(doc, "Planilha de respostas", 2)
-    add_para(doc, "As exportações CSV, Excel e PDF devem conter respostas, indicadores e sinais comportamentais, não apenas nota final. Para a planilha oficial em OneDrive/SharePoint, a recomendação é manter o Supabase como base principal e atualizar uma aba chamada Base automática via Microsoft Graph API.")
+    add_para(doc, "As exportações CSV, Excel e PDF devem conter respostas, indicadores e sinais comportamentais, não apenas nota final. Para a planilha oficial em OneDrive/SharePoint, a recomendação é manter o Supabase como base principal e atualizar uma aba chamada Base automática via Microsoft Graph API. O link real da planilha deve ficar apenas em variável de ambiente, pois o repositório do projeto é público.")
     for item in [
         "Identificação: empresa, contato, cargo e campaign_id.",
         "Status: convidado, abriu, clicou, iniciou, abandonou, retomou ou concluiu.",
         "Respostas: nota NPS, escalas por bloco e campos abertos.",
         "Comportamento: etapa abandonada, tempo por etapa, tempo total e dispositivo.",
         "Qualidade: campos abertos preenchidos, tamanho de comentário e resposta parcial.",
-        "Excel corporativo: arquivo Respostas NPS 2026 no SharePoint/OneDrive, com aba Base automática para integração e abas separadas para resumo executivo, dicionário e configurações.",
+        "Excel corporativo: arquivo Respostas NPS 2026 no SharePoint/OneDrive, com aba Base automática e tabela técnica TabelaRespostasNPS para integração, além de abas separadas para resumo executivo, dicionário e configurações.",
     ]:
         add_bullet(doc, item)
 
@@ -697,7 +697,7 @@ def add_current_implementation(doc: Document) -> None:
         ["APIs internas", "Sessão, início, salvamento de respostas, conclusão e eventos."],
         ["Persistência MVP", "Supabase em produção quando configurado; fallback local JSON para validação funcional."],
         ["Dashboard interno", "Visão de convidados, participação, conclusão, abandono, NPS parcial, score de fricção, clientes silenciosos e exportações."],
-        ["Exportações", "CSV bruto, Excel visual em tons de cinza, PDF executivo resumido e modelo oficial de planilha SharePoint/OneDrive."],
+        ["Exportações", "CSV bruto, Excel visual em tons de cinza, PDF executivo resumido e modelo oficial de planilha SharePoint/OneDrive com tabela TabelaRespostasNPS."],
         ["Clarity", "Script preparado via NEXT_PUBLIC_CLARITY_PROJECT_ID."],
     ]
     add_table(doc, ["Entrega", "Descrição"], rows, widths=[1.65, 4.85])

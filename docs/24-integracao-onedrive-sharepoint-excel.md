@@ -14,11 +14,18 @@ Essa arquitetura evita perda de dados, preserva histórico transacional e permit
 
 1. Criar ou subir no SharePoint o arquivo `Respostas NPS 2026`.
 2. Manter a aba `Base automática` como destino da integração.
-3. A plataforma NPS grava cada resposta no Supabase.
-4. Ao concluir uma resposta, a plataforma atualiza a linha correspondente no Excel via Microsoft Graph API.
-5. O dashboard interno continua usando Supabase como fonte principal.
-6. A equipe pode criar abas adicionais no Excel sem alterar a aba `Base automática`.
-7. Heatmaps e replays continuam no Microsoft Clarity; o Excel pode receber um link manual de replay quando houver análise específica.
+3. Manter a tabela técnica `TabelaRespostasNPS` dentro da aba `Base automática`.
+4. A plataforma NPS grava cada resposta no Supabase.
+5. Ao concluir uma resposta, a plataforma atualiza a linha correspondente no Excel via Microsoft Graph API.
+6. O dashboard interno continua usando Supabase como fonte principal.
+7. A equipe pode criar abas adicionais no Excel sem alterar a aba `Base automática`.
+8. Heatmaps e replays continuam no Microsoft Clarity; o Excel pode receber um link manual de replay quando houver análise específica.
+
+## Link da planilha oficial
+
+O link da planilha SharePoint/OneDrive foi recebido no projeto, mas não deve ser registrado em arquivos versionados porque o repositório está público. O endereço real deve ser configurado apenas em variável de ambiente:
+
+`SHAREPOINT_WORKBOOK_URL`
 
 ## Abas do modelo
 
@@ -94,8 +101,20 @@ Esse peso de 25% organiza a leitura temática, mas não altera o cálculo oficia
 - Não usar login ou senha pessoal na integração.
 - Usar um app autorizado no Microsoft Entra ID.
 - Variáveis esperadas: `MICROSOFT_TENANT_ID`, `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET` e identificação do arquivo no SharePoint.
+- Variável da planilha: `SHAREPOINT_WORKBOOK_URL`.
+- Nome da tabela Excel: `SHAREPOINT_TABLE_NAME=TabelaRespostasNPS`.
 - A aba `Base automática` deve ser tratada como área de sistema.
 - Alterações manuais devem acontecer em outras abas ou nos campos internos previstos para follow-up.
+
+## Permissões Microsoft Graph
+
+A integração deve usar um app autorizado no Microsoft Entra ID com permissão para ler e escrever o arquivo no SharePoint/OneDrive. A implementação preparada resolve o arquivo a partir do link compartilhado e usa a rota de tabela do Excel para adicionar linhas na tabela `TabelaRespostasNPS`.
+
+Endpoint interno de validação:
+
+`/api/admin/sharepoint/status`
+
+Esse endpoint deve ser acessado apenas pelo admin e serve para confirmar se as variáveis foram configuradas e se o arquivo foi resolvido com sucesso via Microsoft Graph.
 
 ## Arquivo modelo
 
