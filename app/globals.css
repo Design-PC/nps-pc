@@ -576,7 +576,8 @@ button:focus-visible,
   padding-bottom: 18px;
 }
 
-.admin-topbar-actions {
+.admin-topbar-actions,
+.admin-action-toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -584,9 +585,35 @@ button:focus-visible,
   gap: 10px;
 }
 
-.admin-topbar-actions .button {
+.admin-topbar-actions .button,
+.admin-action-toolbar .button {
   min-height: 42px;
   min-width: 84px;
+}
+
+.admin-action-toolbar {
+  justify-content: flex-end;
+}
+
+.admin-action-button {
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.admin-action-button.compact {
+  min-width: 0;
+  padding-inline: 14px;
+}
+
+.button-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
 }
 
 .admin-command-bar {
@@ -669,6 +696,15 @@ button:focus-visible,
 .panel-note {
   color: var(--muted);
   line-height: 1.55;
+}
+
+.source-note {
+  border-left: 3px solid var(--primary);
+  margin: 18px 0 0;
+  padding: 9px 0 9px 12px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .health-card {
@@ -1502,13 +1538,16 @@ button:focus-visible,
     flex-direction: column;
   }
 
-  .admin-topbar-actions {
+  .admin-topbar-actions,
+  .admin-action-toolbar {
     justify-content: stretch;
     width: 100%;
   }
 
   .admin-topbar-actions .button,
-  .admin-topbar-actions form {
+  .admin-topbar-actions form,
+  .admin-action-toolbar .button,
+  .admin-action-toolbar form {
     width: 100%;
   }
 

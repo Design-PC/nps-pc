@@ -65,21 +65,25 @@ export default async function AdminDashboardPage() {
           <div className="brand">
             <img alt="Prime Control" className="brand-logo" src="/brand/prime-control-logo.png" />
           </div>
-          <div className="admin-topbar-actions">
-            <Link className="button secondary" href="/">
-              Pesquisa
+          <div className="admin-action-toolbar" aria-label="Ações do dashboard">
+            <Link className="button secondary admin-action-button" href="/">
+              <Icon name="eye" />
+              Visualizar pesquisa NPS
             </Link>
-            <Link className="button secondary" href="/api/admin/export.csv">
+            <Link className="button secondary admin-action-button" href="/api/admin/export.xls">
+              <Icon name="sheet" />
+              Baixar planilha
+            </Link>
+            <Link className="button secondary admin-action-button compact" href="/api/admin/export.csv">
               CSV
             </Link>
-            <Link className="button secondary" href="/api/admin/export.xls">
-              Excel
-            </Link>
-            <Link className="button" href="/api/admin/export.pdf">
+            <Link className="button admin-action-button compact" href="/api/admin/export.pdf">
+              <Icon name="file" />
               PDF
             </Link>
             <form action="/api/admin/logout" method="post">
-              <button className="button ghost" type="submit">
+              <button className="button ghost admin-action-button compact" type="submit">
+                <Icon name="logout" />
                 Sair
               </button>
             </form>
@@ -170,6 +174,10 @@ export default async function AdminDashboardPage() {
                 </div>
               ))}
             </div>
+            <p className="source-note">
+              Fonte: sessões, respostas e eventos registrados pela plataforma. Mapas de calor e
+              replays ficam no Microsoft Clarity como análise complementar.
+            </p>
           </div>
 
           <aside className="panel admin-section action-panel">
@@ -178,6 +186,11 @@ export default async function AdminDashboardPage() {
               <h2>Prioridades</h2>
             </div>
             <div className="action-list">
+              <ActionItem
+                label="Planilha oficial"
+                text="A planilha exportada é gerada em tempo real, sem alterar análises feitas fora do sistema."
+                value="Auto"
+              />
               <ActionItem
                 label="Contas de risco"
                 text="Priorizar contato consultivo."
@@ -322,7 +335,7 @@ function ActionItem({
   tone = "default",
 }: {
   label: string;
-  value: number;
+  value: number | string;
   text: string;
   tone?: "default" | "risk";
 }) {
@@ -334,5 +347,22 @@ function ActionItem({
       </div>
       <p>{text}</p>
     </div>
+  );
+}
+
+function Icon({ name }: { name: "eye" | "sheet" | "file" | "logout" }) {
+  const paths = {
+    eye: "M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Zm10 3.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z",
+    sheet:
+      "M6 2h8l4 4v16H6V2Zm7 1.5V7h3.5M8 11h8M8 15h8M8 19h5",
+    file: "M6 2h8l4 4v16H6V2Zm7 1.5V7h3.5M8 12h8M8 16h6",
+    logout:
+      "M10 17v2H4V5h6v2M14 8l4 4-4 4M18 12H9",
+  };
+
+  return (
+    <svg aria-hidden="true" className="button-icon" viewBox="0 0 24 24">
+      <path d={paths[name]} />
+    </svg>
   );
 }
