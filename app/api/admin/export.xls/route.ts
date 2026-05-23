@@ -17,6 +17,13 @@ export async function GET() {
     getExportData(),
     getDashboardData(),
   ]);
+  const npsTotal = dashboard.npsDistribution.total;
+  const promoterPercent =
+    npsTotal > 0 ? Math.round((dashboard.npsDistribution.promoters / npsTotal) * 100) : 0;
+  const passivePercent =
+    npsTotal > 0 ? Math.round((dashboard.npsDistribution.passives / npsTotal) * 100) : 0;
+  const detractorPercent =
+    npsTotal > 0 ? Math.round((dashboard.npsDistribution.detractors / npsTotal) * 100) : 0;
 
   const html = `<!doctype html>
   <html>
@@ -27,6 +34,7 @@ export async function GET() {
         h1 { color: #003f7d; font-size: 22px; margin: 0 0 8px; }
         h2 { color: #374151; font-size: 16px; margin: 22px 0 8px; }
         .note { color: #4b5563; font-size: 12px; margin-bottom: 16px; }
+        .small-note { color: #4b5563; font-size: 11px; margin: 8px 0 14px; }
         table { border-collapse: collapse; width: 100%; }
         th { background: #e5e7eb; color: #111827; font-weight: 700; }
         th, td { border: 1px solid #cbd5e1; padding: 8px; vertical-align: top; }
@@ -49,7 +57,23 @@ export async function GET() {
         ${metric("Conclusão", `${dashboard.summary.completionRate}%`)}
         ${metric("Abandono", `${dashboard.summary.abandonmentRate}%`)}
         ${metric("NPS parcial", dashboard.summary.npsScore)}
-        ${metric("Score de fricção", dashboard.summary.frictionScore)}
+        ${metric("Score de atrito", dashboard.summary.frictionScore)}
+      </table>
+
+      <h2>Distribuição NPS oficial</h2>
+      <table>
+        ${metric("Promotores | notas 9-10", `${promoterPercent}% (${dashboard.npsDistribution.promoters})`)}
+        ${metric("Neutros | notas 7-8", `${passivePercent}% (${dashboard.npsDistribution.passives})`)}
+        ${metric("Detratores | notas 1-6", `${detractorPercent}% (${dashboard.npsDistribution.detractors})`)}
+        ${metric("Fórmula aplicada", `${promoterPercent}% promotores - ${detractorPercent}% detratores = ${dashboard.summary.npsScore ?? "-"}`)}
+      </table>
+      <div class="small-note">Neutros entram na base total, mas não somam nem subtraem na nota final. Os 4 blocos da pesquisa aparecem como leitura temática com peso visual de 25% cada.</div>
+
+      <h2>Leitura temática | 25% por bloco</h2>
+      <table>
+        ${dashboard.categoryScores
+          .map((item) => metric(`${item.category} | peso 25%`, item.average ?? "-"))
+          .join("")}
       </table>
 
       <h2>Respostas</h2>

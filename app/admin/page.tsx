@@ -7,6 +7,10 @@ function formatPercent(value: number) {
   return `${value}%`;
 }
 
+function distributionPercent(value: number, total: number) {
+  return total > 0 ? Math.round((value / total) * 100) : 0;
+}
+
 function formatDate(value?: string) {
   if (!value) {
     return "-";
@@ -51,6 +55,27 @@ export default async function AdminDashboardPage() {
     (row) => row.riskLevel === "Alto" || row.riskLevel === "Médio",
   );
   const completedRows = data.rows.filter((row) => row.status === "completed");
+  const npsTotal = data.npsDistribution.total;
+  const npsSegments = [
+    {
+      label: "Promotores",
+      range: "Notas 9-10",
+      value: data.npsDistribution.promoters,
+      percent: distributionPercent(data.npsDistribution.promoters, npsTotal),
+    },
+    {
+      label: "Neutros",
+      range: "Notas 7-8",
+      value: data.npsDistribution.passives,
+      percent: distributionPercent(data.npsDistribution.passives, npsTotal),
+    },
+    {
+      label: "Detratores",
+      range: "Notas 1-6",
+      value: data.npsDistribution.detractors,
+      percent: distributionPercent(data.npsDistribution.detractors, npsTotal),
+    },
+  ];
   const campaignHealth =
     data.summary.completionRate >= 70
       ? "Saudável"
@@ -200,29 +225,51 @@ export default async function AdminDashboardPage() {
         <section className="admin-analytics-grid">
           <div className="panel admin-section nps-panel">
             <div className="section-heading">
-              <p className="eyebrow">NPS</p>
-              <h2>Distribuição parcial</h2>
+              <p className="eyebrow">NPS oficial</p>
+              <h2>Distribuição automática da nota</h2>
             </div>
             <div className="nps-split">
-              <DistributionItem label="Promotores" value={data.npsDistribution.promoters} />
-              <DistributionItem label="Neutros" value={data.npsDistribution.passives} />
-              <DistributionItem label="Detratores" value={data.npsDistribution.detractors} />
+              {npsSegments.map((segment) => (
+                <DistributionItem
+                  key={segment.label}
+                  label={segment.label}
+                  percent={segment.percent}
+                  range={segment.range}
+                  value={segment.value}
+                />
+              ))}
+            </div>
+            <div className="nps-formula-box">
+              <span>Cálculo aplicado</span>
+              <strong>
+                {distributionPercent(data.npsDistribution.promoters, npsTotal)}% promotores -{" "}
+                {distributionPercent(data.npsDistribution.detractors, npsTotal)}% detratores ={" "}
+                {data.summary.npsScore ?? "-"}
+              </strong>
+              <p>Neutros entram na base total, mas não somam nem subtraem na nota final.</p>
             </div>
           </div>
 
           <div className="panel admin-section theme-panel">
             <div className="section-heading">
-              <p className="eyebrow">Temas</p>
-              <h2>Média das avaliações</h2>
+              <p className="eyebrow">Leitura temática</p>
+              <h2>4 blocos com peso de 25%</h2>
             </div>
             <div className="category-list-v2">
               {data.categoryScores.map((item) => (
                 <div className="category-row-v2" key={item.category}>
                   <span>{item.category}</span>
-                  <strong>{item.average ?? "-"}</strong>
+                  <div>
+                    <small>25%</small>
+                    <strong>{item.average ?? "-"}</strong>
+                  </div>
                 </div>
               ))}
             </div>
+            <p className="source-note compact">
+              Os 25% organizam a leitura dos blocos da pesquisa. O NPS oficial continua sendo
+              calculado apenas pela pergunta de recomendação.
+            </p>
           </div>
         </section>
 
@@ -300,11 +347,24 @@ function MetricCard({
   );
 }
 
-function DistributionItem({ label, value }: { label: string; value: number }) {
+function DistributionItem({
+  label,
+  value,
+  percent,
+  range,
+}: {
+  label: string;
+  value: number;
+  percent: number;
+  range: string;
+}) {
   return (
     <div className="distribution-item">
       <span>{label}</span>
-      <strong>{value}</strong>
+      <strong>{percent}%</strong>
+      <small>
+        {value} resposta{value === 1 ? "" : "s"} | {range}
+      </small>
     </div>
   );
 }

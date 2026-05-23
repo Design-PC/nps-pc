@@ -133,20 +133,29 @@ function buildPdf(lines: PdfLine[]) {
 
 export async function GET() {
   const data = await getDashboardData();
+  const npsTotal = data.npsDistribution.total;
+  const promoterPercent =
+    npsTotal > 0 ? Math.round((data.npsDistribution.promoters / npsTotal) * 100) : 0;
+  const passivePercent =
+    npsTotal > 0 ? Math.round((data.npsDistribution.passives / npsTotal) * 100) : 0;
+  const detractorPercent =
+    npsTotal > 0 ? Math.round((data.npsDistribution.detractors / npsTotal) * 100) : 0;
   const lines: PdfLine[] = [
     { text: "Resumo da campanha", size: 14, bold: true },
     { text: `Participacao: ${data.summary.participationRate}% | Conclusao: ${data.summary.completionRate}% | Abandono: ${data.summary.abandonmentRate}%` },
     { text: `Convidados: ${data.summary.totalRecipients} | Iniciados: ${data.summary.started} | Concluidos: ${data.summary.completed}` },
     { text: `NPS parcial: ${data.summary.npsScore ?? "-"} | Friccao: ${data.summary.frictionScore} | Tempo medio: ${data.summary.averageCompletionMinutes || 0} min` },
     { text: "" },
-    { text: "Distribuicao NPS", size: 14, bold: true },
+    { text: "Distribuicao NPS oficial", size: 14, bold: true },
     {
-      text: `Promotores: ${data.npsDistribution.promoters} | Neutros: ${data.npsDistribution.passives} | Detratores: ${data.npsDistribution.detractors}`,
+      text: `Promotores 9-10: ${promoterPercent}% (${data.npsDistribution.promoters}) | Neutros 7-8: ${passivePercent}% (${data.npsDistribution.passives}) | Detratores 1-6: ${detractorPercent}% (${data.npsDistribution.detractors})`,
     },
+    { text: `Formula: ${promoterPercent}% promotores - ${detractorPercent}% detratores = ${data.summary.npsScore ?? "-"}` },
+    { text: "Neutros entram na base total, mas nao somam nem subtraem na nota final." },
     { text: "" },
-    { text: "Medias por tema", size: 14, bold: true },
+    { text: "Leitura tematica - 4 blocos com peso de 25%", size: 14, bold: true },
     ...data.categoryScores.map((item) => ({
-      text: `${item.category}: ${item.average ?? "-"}`,
+      text: `${item.category}: ${item.average ?? "-"} | Peso visual: 25%`,
     })),
     { text: "" },
     { text: "Funil da jornada", size: 14, bold: true },
