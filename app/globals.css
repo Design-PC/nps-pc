@@ -628,7 +628,7 @@ button:focus-visible,
 
 .admin-dashboard-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.35fr);
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 0.46fr);
   gap: 18px;
   align-items: stretch;
   margin-bottom: 14px;
@@ -656,6 +656,12 @@ button:focus-visible,
   background: #fbfdff;
 }
 
+.campaign-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .campaign-status-card span,
 .action-item span {
   display: block;
@@ -669,7 +675,7 @@ button:focus-visible,
   display: block;
   margin: 8px 0 6px;
   color: var(--primary);
-  font-size: 28px;
+  font-size: 32px;
   line-height: 1;
 }
 

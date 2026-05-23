@@ -76,13 +76,6 @@ export default async function AdminDashboardPage() {
       percent: distributionPercent(data.npsDistribution.detractors, npsTotal),
     },
   ];
-  const campaignHealth =
-    data.summary.completionRate >= 70
-      ? "Saudável"
-      : data.summary.started === 0
-        ? "Aguardando"
-        : "Acompanhar";
-
   return (
     <main className="page-shell admin-page">
       <div className="admin-shell">
@@ -119,12 +112,19 @@ export default async function AdminDashboardPage() {
           <div>
             <p className="eyebrow">Plataforma NPS Corporativa</p>
             <h1>Painel da campanha</h1>
-            <p>Indicadores para priorizar adesão, conclusão, risco e follow-up.</p>
+            <p>Resumo direto da participação e da nota NPS da campanha.</p>
           </div>
-          <div className="campaign-status-card">
-            <span>Status</span>
-            <strong>{campaignHealth}</strong>
-            <p>{data.summary.completed}/{data.summary.totalRecipients} respostas concluídas</p>
+          <div className="campaign-summary-cards">
+            <div className="campaign-status-card">
+              <span>Respostas</span>
+              <strong>{data.summary.completed}/{data.summary.totalRecipients}</strong>
+              <p>concluídas</p>
+            </div>
+            <div className="campaign-status-card">
+              <span>NPS</span>
+              <strong>{data.summary.npsScore ?? "-"}</strong>
+              <p>índice de -100 a +100</p>
+            </div>
           </div>
         </section>
 
