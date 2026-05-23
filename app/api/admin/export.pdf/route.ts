@@ -2,20 +2,28 @@ import { getDashboardData } from "@/lib/nps-db";
 
 export const dynamic = "force-dynamic";
 
-function pdfHex(value: unknown) {
-  const text = String(value ?? "");
-  const bytes = [0xfe, 0xff];
+type PdfLine = {
+  text: string;
+  size?: number;
+  bold?: boolean;
+  gapAfter?: number;
+};
 
-  for (let index = 0; index < text.length; index += 1) {
-    const code = text.charCodeAt(index);
-    bytes.push((code >> 8) & 0xff, code & 0xff);
-  }
+function normalizePdfText(value: unknown) {
+  return String(value ?? "")
+    .normalize("NFC")
+    .replace(/[–—]/g, "-")
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF]/g, "");
+}
 
-  return bytes.map((byte) => byte.toString(16).padStart(2, "0")).join("").toUpperCase();
+function escapePdfText(value: unknown) {
+  return normalizePdfText(value).replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 }
 
 function wrapText(text: string, maxChars: number) {
-  const words = text.split(/\s+/).filter(Boolean);
+  const words = normalizePdfText(text).split(/\s+/).filter(Boolean);
   const lines: string[] = [];
   let current = "";
 
@@ -36,11 +44,10 @@ function wrapText(text: string, maxChars: number) {
   return lines.length ? lines : [""];
 }
 
-function createPdf(lines: string[]) {
+function buildPdf(lines: PdfLine[]) {
   const pageWidth = 595;
   const pageHeight = 842;
-  const margin = 44;
-  const lineHeight = 15;
+  const margin = 42;
   const pages: string[] = [];
   let y = pageHeight - margin;
   let content = "";
@@ -53,30 +60,40 @@ function createPdf(lines: string[]) {
     y = pageHeight - margin;
   }
 
-  function drawText(text: string, size = 10, bold = false, x = margin) {
+  function drawText(text: string, size = 10, bold = false, x = margin, gapAfter = 6) {
+    const lineHeight = Math.max(13, size + 5);
     if (y < margin + lineHeight) {
       addPage();
     }
-    content += `BT /${bold ? "F2" : "F1"} ${size} Tf ${x} ${y} Td <${pdfHex(text)}> Tj ET\n`;
-    y -= lineHeight;
+
+    content += `BT /${bold ? "F2" : "F1"} ${size} Tf ${x} ${y} Td (${escapePdfText(text)}) Tj ET\n`;
+    y -= lineHeight + gapAfter;
   }
 
-  drawText("Prime Control - Pesquisa de Satisfação NPS", 18, true);
-  drawText("Relatório executivo gerado pela Plataforma NPS Corporativa.", 10);
-  y -= 10;
+  function drawRule() {
+    if (y < margin + 18) {
+      addPage();
+    }
+    content += `0.84 0.88 0.92 RG 1 w ${margin} ${y} m ${pageWidth - margin} ${y} l S\n`;
+    y -= 18;
+  }
+
+  content += `0.00 0.27 0.53 RG 2 w ${margin} ${y} m ${pageWidth - margin} ${y} l S\n`;
+  y -= 28;
+  drawText("Prime Control - Relatorio NPS", 19, true, margin, 2);
+  drawText("Dashboard executivo da Pesquisa de Satisfacao | Maio 2026", 10, false, margin, 14);
+  drawRule();
 
   for (const line of lines) {
-    if (line === "") {
+    if (!line.text) {
       y -= 8;
       continue;
     }
-    const isHeading = line.startsWith("## ");
-    const cleanLine = line.replace(/^##\s*/, "");
-    for (const wrapped of wrapText(cleanLine, isHeading ? 56 : 88)) {
-      drawText(wrapped, isHeading ? 13 : 10, isHeading);
-    }
-    if (isHeading) {
-      y -= 4;
+
+    const size = line.size ?? 10;
+    const isHeading = Boolean(line.bold && size >= 13);
+    for (const wrapped of wrapText(line.text, isHeading ? 58 : 92)) {
+      drawText(wrapped, size, line.bold, margin, line.gapAfter ?? (isHeading ? 5 : 2));
     }
   }
 
@@ -87,66 +104,67 @@ function createPdf(lines: string[]) {
     `<< /Type /Pages /Kids ${pages.map((_, index) => `${3 + index * 2} 0 R`).join(" ")} /Count ${pages.length} >>`,
   ];
 
-  pages.forEach((pageContent, index) => {
-    const pageObjectId = 3 + index * 2;
+  pages.forEach((pageContent) => {
+    const pageObjectId = objects.length + 1;
     const contentObjectId = pageObjectId + 1;
     objects.push(
-      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> /F2 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >> >> >> /Contents ${contentObjectId} 0 R >>`,
+      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >> /F2 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >> >> >> /Contents ${contentObjectId} 0 R >>`,
     );
-    objects.push(`<< /Length ${Buffer.byteLength(pageContent, "utf-8")} >>\nstream\n${pageContent}endstream`);
+    objects.push(`<< /Length ${Buffer.byteLength(pageContent, "latin1")} >>\nstream\n${pageContent}endstream`);
   });
 
-  let pdf = "%PDF-1.4\n";
+  let pdf = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
   const offsets = [0];
+
   objects.forEach((object, index) => {
-    offsets.push(Buffer.byteLength(pdf, "utf-8"));
+    offsets.push(Buffer.byteLength(pdf, "latin1"));
     pdf += `${index + 1} 0 obj\n${object}\nendobj\n`;
   });
 
-  const xrefOffset = Buffer.byteLength(pdf, "utf-8");
+  const xrefOffset = Buffer.byteLength(pdf, "latin1");
   pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
   for (let index = 1; index <= objects.length; index += 1) {
     pdf += `${String(offsets[index]).padStart(10, "0")} 00000 n \n`;
   }
-  pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+  pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF\n`;
 
-  return pdf;
+  return Buffer.from(pdf, "latin1");
 }
 
 export async function GET() {
   const data = await getDashboardData();
-  const lines = [
-    "## Resumo executivo",
-    `Convidados: ${data.summary.totalRecipients}`,
-    `Participação: ${data.summary.participationRate}%`,
-    `Iniciados: ${data.summary.started}`,
-    `Concluídos: ${data.summary.completed}`,
-    `Conclusão: ${data.summary.completionRate}%`,
-    `Abandono: ${data.summary.abandonmentRate}%`,
-    `NPS parcial: ${data.summary.npsScore ?? "-"}`,
-    `Score de fricção: ${data.summary.frictionScore}`,
-    "",
-    "## Distribuição NPS",
-    `Promotores: ${data.npsDistribution.promoters}`,
-    `Neutros: ${data.npsDistribution.passives}`,
-    `Detratores: ${data.npsDistribution.detractors}`,
-    "",
-    "## Médias por tema",
-    ...data.categoryScores.map((item) => `${item.category}: ${item.average ?? "-"}`),
-    "",
-    "## Respondentes e status",
-    ...data.rows.map(
-      (row) =>
-        `${row.company} | ${row.name} | ${row.email} | ${row.status} | NPS: ${
-          row.npsScore ?? "-"
-        } | ${row.answeredCount}/${row.totalQuestionCount} respostas | Sinal: ${row.riskLevel}`,
-    ),
+  const lines: PdfLine[] = [
+    { text: "Resumo da campanha", size: 14, bold: true },
+    { text: `Participacao: ${data.summary.participationRate}% | Conclusao: ${data.summary.completionRate}% | Abandono: ${data.summary.abandonmentRate}%` },
+    { text: `Convidados: ${data.summary.totalRecipients} | Iniciados: ${data.summary.started} | Concluidos: ${data.summary.completed}` },
+    { text: `NPS parcial: ${data.summary.npsScore ?? "-"} | Friccao: ${data.summary.frictionScore} | Tempo medio: ${data.summary.averageCompletionMinutes || 0} min` },
+    { text: "" },
+    { text: "Distribuicao NPS", size: 14, bold: true },
+    {
+      text: `Promotores: ${data.npsDistribution.promoters} | Neutros: ${data.npsDistribution.passives} | Detratores: ${data.npsDistribution.detractors}`,
+    },
+    { text: "" },
+    { text: "Medias por tema", size: 14, bold: true },
+    ...data.categoryScores.map((item) => ({
+      text: `${item.category}: ${item.average ?? "-"}`,
+    })),
+    { text: "" },
+    { text: "Funil da jornada", size: 14, bold: true },
+    ...data.stepDropoff.map((step) => ({
+      text: `${step.stepName}: ${step.reached} chegaram | ${step.stoppedHere} pararam | abandono ${step.dropoffRate}%`,
+    })),
+    { text: "" },
+    { text: "Respondentes e status", size: 14, bold: true },
+    ...data.rows.map((row) => ({
+      text: `${row.company} | ${row.name} | ${row.email} | ${row.status} | NPS ${row.npsScore ?? "-"} | ${row.answeredCount}/${row.totalQuestionCount} | ${row.riskLevel}`,
+    })),
   ];
 
-  return new Response(Buffer.from(createPdf(lines), "utf-8"), {
+  return new Response(buildPdf(lines), {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": 'attachment; filename="prime-control-nps-dashboard.pdf"',
+      "Cache-Control": "no-store",
     },
   });
 }

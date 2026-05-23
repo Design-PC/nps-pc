@@ -55,7 +55,7 @@ export default async function AdminDashboardPage() {
     data.summary.completionRate >= 70
       ? "Saudável"
       : data.summary.started === 0
-        ? "Aguardando respostas"
+        ? "Aguardando"
         : "Acompanhar";
 
   return (
@@ -68,11 +68,11 @@ export default async function AdminDashboardPage() {
           <div className="admin-action-toolbar" aria-label="Ações do dashboard">
             <Link className="button secondary admin-action-button" href="/">
               <Icon name="eye" />
-              Visualizar pesquisa NPS
+              Ver pesquisa
             </Link>
             <Link className="button secondary admin-action-button" href="/api/admin/export.xls">
               <Icon name="sheet" />
-              Baixar planilha
+              Planilha
             </Link>
             <Link className="button secondary admin-action-button compact" href="/api/admin/export.csv">
               CSV
@@ -93,26 +93,20 @@ export default async function AdminDashboardPage() {
         <section className="admin-dashboard-hero panel">
           <div>
             <p className="eyebrow">Plataforma NPS Corporativa</p>
-            <h1>Dashboard executivo da campanha</h1>
-            <p>
-              Visão consolidada de adesão, conclusão, NPS, contas silenciosas e sinais
-              de fricção para orientar ação rápida durante a campanha.
-            </p>
+            <h1>Painel da campanha</h1>
+            <p>Indicadores para priorizar adesão, conclusão, risco e follow-up.</p>
           </div>
           <div className="campaign-status-card">
-            <span>Status da campanha</span>
+            <span>Status</span>
             <strong>{campaignHealth}</strong>
-            <p>
-              {data.summary.completed} conclusões de {data.summary.totalRecipients} contatos
-              monitorados.
-            </p>
+            <p>{data.summary.completed}/{data.summary.totalRecipients} respostas concluídas</p>
           </div>
         </section>
 
         <section className="admin-kpi-grid">
           <MetricCard
             helper={`${data.summary.started} iniciados`}
-            label="Participação"
+            label="Adesão"
             value={formatPercent(data.summary.participationRate)}
           />
           <MetricCard
@@ -122,12 +116,12 @@ export default async function AdminDashboardPage() {
           />
           <MetricCard
             helper={`${data.npsDistribution.total} notas`}
-            label="NPS parcial"
+            label="NPS"
             value={data.summary.npsScore === null ? "-" : data.summary.npsScore}
           />
           <MetricCard
             helper="menor é melhor"
-            label="Fricção"
+            label="Atrito"
             tone={data.summary.frictionScore >= 40 ? "risk" : "default"}
             value={data.summary.frictionScore}
           />
@@ -139,7 +133,7 @@ export default async function AdminDashboardPage() {
           />
           <MetricCard
             helper="conclusão"
-            label="Tempo médio"
+            label="Tempo"
             value={`${data.summary.averageCompletionMinutes || 0} min`}
           />
         </section>
@@ -149,9 +143,9 @@ export default async function AdminDashboardPage() {
             <div className="section-heading row-heading">
               <div>
                 <p className="eyebrow">Jornada</p>
-                <h2>Funil e abandono</h2>
+                <h2>Onde perdemos resposta</h2>
               </div>
-              <span className="status-pill">{data.summary.averageQuestionSeconds}s por pergunta</span>
+              <span className="status-pill">{data.summary.averageQuestionSeconds}s/pergunta</span>
             </div>
 
             <div className="funnel-list">
@@ -161,7 +155,7 @@ export default async function AdminDashboardPage() {
                   <div className="funnel-meta">
                     <strong>{step.stepName}</strong>
                     <span>
-                      {step.reached} chegaram | {step.stoppedHere} pararam aqui
+                      {step.reached} chegaram | {step.stoppedHere} pararam
                     </span>
                   </div>
                   <div className="funnel-track" aria-hidden="true">
@@ -175,39 +169,30 @@ export default async function AdminDashboardPage() {
               ))}
             </div>
             <p className="source-note">
-              Fonte: sessões, respostas e eventos registrados pela plataforma. Mapas de calor e
-              replays ficam no Microsoft Clarity como análise complementar.
+              Fonte: plataforma NPS. Heatmaps e replays ficam no Microsoft Clarity.
             </p>
           </div>
 
           <aside className="panel admin-section action-panel">
             <div className="section-heading">
-              <p className="eyebrow">Ação sugerida</p>
-              <h2>Prioridades</h2>
+              <p className="eyebrow">Ação</p>
+              <h2>Próximos movimentos</h2>
             </div>
             <div className="action-list">
+              <ActionItem label="Planilha" text="Atualiza em tempo real." value="Auto" />
               <ActionItem
-                label="Planilha oficial"
-                text="A planilha exportada é gerada em tempo real, sem alterar análises feitas fora do sistema."
-                value="Auto"
-              />
-              <ActionItem
-                label="Contas de risco"
-                text="Priorizar contato consultivo."
+                label="Risco"
+                text="Contato consultivo."
                 tone={riskRows.length > 0 ? "risk" : "default"}
                 value={riskRows.length}
               />
               <ActionItem
-                label="Clientes silenciosos"
-                text="Reforçar lembrete pelo responsável."
+                label="Silenciosos"
+                text="Lembrete pelo responsável."
                 tone={silentRows.length > 0 ? "risk" : "default"}
                 value={silentRows.length}
               />
-              <ActionItem
-                label="Base concluída"
-                text="Monitorar comentários e detratores."
-                value={completedRows.length}
-              />
+              <ActionItem label="Concluídos" text="Ler comentários críticos." value={completedRows.length} />
             </div>
           </aside>
         </section>
@@ -223,15 +208,11 @@ export default async function AdminDashboardPage() {
               <DistributionItem label="Neutros" value={data.npsDistribution.passives} />
               <DistributionItem label="Detratores" value={data.npsDistribution.detractors} />
             </div>
-            <p className="panel-note">
-              Acompanhe tendência durante a campanha. A análise final deve considerar a
-              base completa e o contexto de cada cliente.
-            </p>
           </div>
 
           <div className="panel admin-section theme-panel">
             <div className="section-heading">
-              <p className="eyebrow">Percepção por tema</p>
+              <p className="eyebrow">Temas</p>
               <h2>Média das avaliações</h2>
             </div>
             <div className="category-list-v2">
@@ -248,7 +229,7 @@ export default async function AdminDashboardPage() {
         <section className="panel admin-section">
           <div className="section-heading row-heading">
             <div>
-              <p className="eyebrow">Base de clientes</p>
+              <p className="eyebrow">Base</p>
               <h2>Respondentes e status</h2>
             </div>
             <span className="status-pill">{data.rows.length} registros</span>
@@ -356,8 +337,7 @@ function Icon({ name }: { name: "eye" | "sheet" | "file" | "logout" }) {
     sheet:
       "M6 2h8l4 4v16H6V2Zm7 1.5V7h3.5M8 11h8M8 15h8M8 19h5",
     file: "M6 2h8l4 4v16H6V2Zm7 1.5V7h3.5M8 12h8M8 16h6",
-    logout:
-      "M10 17v2H4V5h6v2M14 8l4 4-4 4M18 12H9",
+    logout: "M10 17v2H4V5h6v2M14 8l4 4-4 4M18 12H9",
   };
 
   return (

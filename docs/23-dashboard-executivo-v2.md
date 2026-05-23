@@ -1,28 +1,39 @@
-# Dashboard executivo v2
+# Dashboard executivo
 
 ## Objetivo
 
-Reestruturar o dashboard interno para funcionar como uma central executiva da campanha, priorizando leitura rápida, contas que exigem ação e exportações para análise.
+Manter o dashboard interno como uma central de decisão da campanha NPS, com leitura rápida, pouca carga textual e foco nos próximos movimentos: aumentar adesão, reduzir abandono, acompanhar risco e exportar dados.
 
-## Mudanças implementadas
+## Ajustes implementados
 
-- Novo topo com status da campanha e ações principais: Pesquisa, CSV, Excel, PDF e Sair.
-- Barra de ações renomeada para linguagem mais clara: Visualizar pesquisa NPS, Baixar planilha, CSV, PDF e Sair com ícone.
-- Nota de origem dos dados no bloco de jornada: sessões, respostas e eventos da plataforma. Mapas de calor e replays ficam no Microsoft Clarity como análise complementar.
-- Indicação de que a planilha exportada é gerada em tempo real a partir da base atual, sem alterar análises feitas fora do sistema.
-- KPIs principais em destaque: participação, conclusão, NPS parcial, fricção, silenciosos e tempo médio.
-- Bloco de jornada com funil e abandono em formato mais claro.
-- Bloco de prioridades com contas de risco, clientes silenciosos e base concluída.
-- Distribuição NPS e médias por tema reorganizadas em uma segunda faixa analítica.
+- Topo simplificado com ações essenciais: Ver pesquisa, Planilha, CSV, PDF e Sair.
+- Hero reduzido para uma mensagem objetiva: status da campanha e respostas concluídas.
+- KPIs priorizados: adesão, conclusão, NPS, atrito, clientes silenciosos e tempo médio.
+- Bloco de jornada renomeado para deixar clara a pergunta central: onde perdemos resposta.
+- Fonte dos dados resumida: plataforma NPS para eventos estruturados; Microsoft Clarity para heatmaps e replays.
+- Bloco de próximos movimentos enxuto, sem textos longos.
+- Distribuição NPS e médias por tema mantidas como leitura analítica secundária.
 - Tabela de respondentes mantida como detalhe operacional.
+- Exportação PDF corrigida para gerar arquivo PDF válido e compatível com leitores comuns.
 
-## Racional
+## Arquitetura da informação
 
-O dashboard anterior estava funcional, mas exigia interpretação técnica. A nova versão aproxima a tela de uma visão de gestão: o primeiro olhar mostra saúde da campanha, riscos e ações sugeridas; as tabelas ficam como suporte para investigação.
+1. Ações globais no topo.
+2. Saúde da campanha em destaque.
+3. KPIs executivos.
+4. Jornada e abandono.
+5. Próximas ações.
+6. Leituras analíticas.
+7. Base detalhada.
+
+## Origem dos dados
+
+O dashboard usa dados registrados pela própria plataforma: contatos, sessões, respostas, status, tempo de atividade, progresso e eventos internos. O Microsoft Clarity não é consumido automaticamente pelo dashboard nesta versão; ele deve ser acessado separadamente para análise visual de mapa de calor, gravações de sessão, cliques mortos e cliques de raiva.
 
 ## Critérios de aceite
 
-- A tela deve abrir em `/admin` após login.
-- Os botões de exportação devem continuar funcionando.
-- Os indicadores devem ser compreensíveis sem conhecimento técnico.
-- A interface deve ser responsiva para notebook, tablet e mobile.
+- `/admin` deve abrir após login administrativo.
+- Exportações CSV, Excel e PDF devem funcionar.
+- O PDF deve baixar com `Content-Type: application/pdf` e abrir como relatório.
+- A primeira dobra deve comunicar status, KPIs e ações sem excesso de texto.
+- A tela deve continuar responsiva para notebook, tablet e mobile.
