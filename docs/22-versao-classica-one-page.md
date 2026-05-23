@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Criar uma alternativa de pesquisa em página única, inspirada no formato direto de planilhas corporativas e pesquisas como GPTW, para comparação com o fluxo multi-step.
+Consolidar a pesquisa em página única como experiência oficial da campanha, inspirada no formato direto de planilhas corporativas e pesquisas como GPTW, preservando o fluxo multi-step como backup técnico.
 
 ## Decisão de experiência
 
@@ -36,4 +36,4 @@ Criar uma alternativa de pesquisa em página única, inspirada no formato direto
 
 ## Uso recomendado
 
-Usar esta versão como teste comparativo com o fluxo multi-step. A decisão final deve considerar taxa de início, taxa de conclusão, tempo médio, abandono e qualidade das respostas abertas.
+Usar esta versão como link oficial da campanha. Acompanhar taxa de conclusão, tempo médio, abandono, qualidade das respostas abertas e sinais do Clarity para validar se a experiência direta mantém alta adesão.

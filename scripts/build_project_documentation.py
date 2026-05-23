@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "deliverables"
 LOGO = ROOT / "public" / "brand" / "prime-control-logo.png"
 DOCX_PATH = OUT_DIR / "Prime_Control_NPS_Documentacao_Executiva_Tecnica.docx"
+DOCX_FALLBACK_PATH = OUT_DIR / "Prime_Control_NPS_Documentacao_Executiva_Tecnica_v1_4.docx"
 
 BLUE = "003F7D"
 DARK = "102A43"
@@ -340,13 +341,13 @@ def add_cover(doc: Document) -> None:
         doc,
         [
             ("Foco", "Adesão"),
-            ("Experiência", "Multi-step"),
-            ("Dados", "Dashboard + planilha"),
+            ("Experiência", "One-page"),
+            ("Dados", "Dashboard + CSV/Excel/PDF"),
             ("Analytics", "Clarity + eventos"),
         ]
     )
 
-    add_para(doc, f"Versão: 1.3 | Atualizado em: {date.today().strftime('%d/%m/%Y')}", size=10, color=MUTED, before=18, after=34)
+    add_para(doc, f"Versão: 1.4 | Atualizado em: {date.today().strftime('%d/%m/%Y')}", size=10, color=MUTED, before=18, after=34)
     add_para(doc, "Documento consolidado a partir da auditoria, estratégia, PRD técnico, roadmap, backlog, operação de campanha e implementação inicial do MVP.", size=9.6, color=MUTED)
     doc.add_page_break()
 
@@ -380,9 +381,9 @@ def add_summary(doc: Document) -> None:
     add_heading(doc, "Decisões estratégicas já tomadas", 2)
     for item in [
         "Preservar integralmente as perguntas existentes, sem reescrita ou enviesamento.",
-        "Usar experiência multi-step para reduzir sobrecarga cognitiva.",
-        "Salvar progresso e permitir retomada por controle interno invisível para o cliente.",
-        "Gerar planilha executiva e dashboard operacional com respostas e comportamento.",
+        "Tornar a versão em página única a experiência oficial da campanha, com leitura direta e responsiva.",
+        "Preservar a versão multi-step como backup técnico para comparação e contingência.",
+        "Gerar dashboard operacional e exportações em CSV, Excel visual e PDF executivo.",
         "Integrar Microsoft Clarity para mapas de calor e replay de sessão.",
         "Preparar integração com HubSpot para envio, segmentação e follow-up.",
     ]:
@@ -405,7 +406,7 @@ def add_context_history(doc: Document) -> None:
     rows = [
         ["2025", "Pesquisa anterior", "Baixa visibilidade: resposta ou não resposta, sem leitura de jornada."],
         ["2026", "Perguntas revisadas", "Perguntas definidas em planilha; interface final ainda precisa ser desenhada."],
-        ["Projeto atual", "Plataforma NPS", "Experiência multi-step, analytics, dashboard, planilha e integração com CRM."],
+        ["Projeto atual", "Plataforma NPS", "Experiência one-page oficial, analytics, dashboard, exportações e integração com CRM."],
     ]
     add_table(doc, ["Momento", "Contexto", "Implicação"], rows, widths=[1.1, 1.75, 3.65])
 
@@ -416,7 +417,7 @@ def add_toc(doc: Document) -> None:
         ["1", "Sumário executivo", "Decisão, racional e visão de negócio."],
         ["2", "Histórico e contexto", "Versão 2025, revisão 2026 e premissas."],
         ["3", "Auditoria da pesquisa atual", "Riscos de UX, fricção e baixa adesão."],
-        ["4", "Redesenho da experiência", "Arquitetura multi-step e racional psicológico."],
+        ["4", "Redesenho da experiência", "Arquitetura one-page oficial, backup multi-step e racional psicológico."],
         ["5", "Jornada comportamental", "Riscos, objeções e mitigação por etapa."],
         ["6", "Analytics e dados", "Clarity, eventos, planilha, dashboard e tracking."],
         ["7", "PRD técnico", "Frontend, backend, banco, segurança e integrações."],
@@ -455,23 +456,23 @@ def add_experience(doc: Document) -> None:
     add_callout(
         doc,
         "Princípio de UX",
-        "A pesquisa deve parecer menor do que é. Não reduzimos perguntas; reduzimos percepção de esforço por meio de etapas, progresso, salvamento e linguagem executiva.",
+        "A pesquisa deve ser direta, clara e executiva. Não reduzimos perguntas; reduzimos fricção por meio de página única, seções bem demarcadas, campos compactos, validação visual e linguagem neutra.",
     )
     rows = [
-        ["0", "Landing", "Propósito, tempo estimado, confiança e CTA."],
-        ["1", "Identificação", "Dados pré-preenchidos via HubSpot e controle interno."],
+        ["Topo", "Título e contexto", "Pesquisa de Satisfação | NPS | Maio 2026, tempo estimado e validade."],
+        ["Identificação", "Nome, e-mail corporativo, empresa e cargo", "Campo Área removido para reduzir esforço; e-mail com validação visual."],
         ["2", "Relacionamento e Satisfação", "NPS e motivo da nota."],
         ["3", "Percepção de Valor", "Avaliação de valor, relevância e resultados."],
         ["4", "Qualidade Operacional", "Entregas, prazos, clareza, atendimento e resposta."],
-        ["5", "Inovação, Transformação e Futuro", "Última etapa com visão estratégica e campos abertos."],
-        ["6", "Conclusão", "Confirmação executiva e encerramento."],
+        ["4", "Inovação, Transformação e Futuro", "Percepção de inovação e oportunidades futuras."],
+        ["Backup", "Fluxo multi-step preservado", "Rota de contingência para comparação futura."],
     ]
-    add_table(doc, ["Etapa", "Nome", "Papel na jornada"], rows, widths=[0.55, 2.25, 3.7])
+    add_table(doc, ["Bloco", "Conteúdo", "Papel na jornada"], rows, widths=[0.95, 2.35, 3.2])
     add_heading(doc, "Racional psicológico", 2)
     for item in [
-        "Chunking: blocos menores reduzem sobrecarga cognitiva.",
-        "Goal gradient effect: progresso visível aumenta motivação para concluir.",
-        "Perceived control: autosave e retomada reduzem ansiedade.",
+        "Uma página reduz transições e funciona bem para clientes que preferem objetividade.",
+        "Seções e perguntas numeradas facilitam orientação sem numerar os títulos.",
+        "Validação visual imediata reduz erro no envio e frustração no fim do preenchimento.",
         "Executive respect: tempo estimado e linguagem objetiva sinalizam respeito pelo tempo.",
         "Neutralidade metodológica: microcopy apoia o preenchimento sem sugerir nota.",
     ]:
@@ -479,11 +480,11 @@ def add_experience(doc: Document) -> None:
     add_heading(doc, "Decisão sobre a ordem da escala", 2)
     add_para(
         doc,
-        "A escala deve ser apresentada visualmente de forma crescente, da esquerda para a direita. Para NPS, o padrão mais reconhecido é 0 a 10; para perguntas de satisfação, quando a metodologia aprovada usa 1 a 10, a apresentação recomendada é 1 a 10.",
+        "A decisão metodológica preferencial é manter a escala clara e neutra. A versão oficial atual segue a referência visual aprovada pela área, com quadradinhos de 10 a 1 ao lado da pergunta; esse ponto deve ser monitorado em analytics para confirmar se não aumenta erro de clique ou hesitação.",
     )
     rows = [
-        ["1 → 10 ou 0 → 10", "Fluxo mental natural de leitura", "Reduz erro de clique e transmite neutralidade."],
-        ["10 → 1 ou 10 → 0", "Ordem invertida", "Aumenta carga cognitiva, pode parecer indução à nota alta e prejudica mobile."],
+        ["10 → 1", "Formato atual da interface oficial", "Mantém alinhamento com a referência de planilha/GPTW enviada."],
+        ["1 → 10", "Alternativa metodologicamente mais natural para leitura", "Pode ser testada depois, se houver indício de erro, hesitação ou confusão."],
         ["Sem destaque prévio do 10", "Neutralidade visual", "Evita sinalizar que a empresa espera uma resposta positiva."],
     ]
     add_table(doc, ["Formato", "Leitura do usuário", "Efeito esperado"], rows, widths=[1.55, 2.2, 2.75])
@@ -494,9 +495,9 @@ def add_journey(doc: Document) -> None:
     rows = [
         ["Recebe e-mail", "Ignorar", "Assunto claro, remetente confiável e personalização."],
         ["Abre e-mail", "Leitura superficial", "Texto curto, tempo estimado e propósito."],
-        ["Clica no link", "Medo de formulário longo", "Landing leve, sem expor todas as perguntas."],
-        ["Inicia", "Adiar", "CTA claro e promessa de 3 a 5 minutos."],
-        ["Confirma dados", "Fricção", "Pré-preenchimento via HubSpot."],
+        ["Clica no link", "Medo de formulário longo", "Acesso direto à pesquisa oficial na raiz do site."],
+        ["Inicia", "Adiar", "Tempo estimado visível e perguntas em uma página."],
+        ["Confirma dados", "Fricção", "Apenas nome, e-mail corporativo, empresa e cargo."],
         ["Responde NPS", "Dúvida de escala", "Escala crescente e rótulos claros."],
         ["Campos abertos", "Bloqueio textual", "Microcopy neutra: uma frase já ajuda."],
         ["Finaliza", "Fadiga tardia", "Mensagem de última etapa e progresso visível."],
@@ -519,9 +520,9 @@ def add_analytics(doc: Document) -> None:
         ["Microsoft Clarity", "Mapas de calor, replay de sessão, rage clicks, dead clicks, comportamento mobile.", "Entender como o usuário se comporta visualmente."],
         ["PostHog", "Eventos, funis, coortes, tempo por etapa, abandono por pergunta.", "Entender onde o funil quebra."],
         ["GA4", "Origem, dispositivo, navegador, UTM e tráfego.", "Entender de onde o usuário veio."],
-        ["Banco próprio", "Respostas, sessões, identificação interna, progresso e eventos.", "Garantir confiabilidade e exportação."],
+        ["Banco próprio", "Respostas, sessões, identificação interna e eventos.", "Garantir confiabilidade e exportação."],
         ["Dashboard", "Participação, abandono, NPS, clientes silenciosos e risco.", "Apoiar liderança e CS."],
-        ["Planilha", "CSV/XLSX de respostas e comportamento.", "Permitir análise, auditoria e compartilhamento."],
+        ["Exportações", "CSV, Excel visual em tons de cinza e PDF executivo.", "Permitir análise, auditoria e compartilhamento."],
     ]
     add_table(doc, ["Camada", "O que mede", "Por que importa"], rows, widths=[1.4, 2.75, 2.35])
     add_heading(doc, "Explicação em linguagem executiva", 2)
@@ -545,9 +546,9 @@ def add_analytics(doc: Document) -> None:
     ]
     add_table(doc, ["Evento", "Trigger", "Properties"], rows, widths=[2.15, 1.85, 2.5])
     add_heading(doc, "Planilha de respostas", 2)
-    add_para(doc, "A exportação CSV/XLSX deve conter respostas e sinais comportamentais, não apenas nota final.")
+    add_para(doc, "As exportações CSV, Excel e PDF devem conter respostas, indicadores e sinais comportamentais, não apenas nota final.")
     for item in [
-        "Identificação: empresa, contato, cargo, área e campaign_id.",
+        "Identificação: empresa, contato, cargo e campaign_id.",
         "Status: convidado, abriu, clicou, iniciou, abandonou, retomou ou concluiu.",
         "Respostas: nota NPS, escalas por bloco e campos abertos.",
         "Comportamento: etapa abandonada, tempo por etapa, tempo total e dispositivo.",
@@ -579,7 +580,7 @@ def add_technical_prd(doc: Document) -> None:
     add_heading(doc, "9. PRD técnico", 1)
     add_heading(doc, "Arquitetura recomendada", 2)
     rows = [
-        ["Frontend", "Next.js, TypeScript, Tailwind, Shadcn UI", "Experiência multi-step responsiva."],
+        ["Frontend", "Next.js e TypeScript", "Experiência one-page responsiva, com backup multi-step."],
         ["Banco", "Supabase ou PostgreSQL", "Persistência de respostas, sessões e eventos."],
         ["CRM", "HubSpot", "Envio, segmentação, status e lembretes."],
         ["Analytics", "Clarity, PostHog, GA4", "Comportamento visual, funil e origem."],
@@ -589,10 +590,13 @@ def add_technical_prd(doc: Document) -> None:
     add_table(doc, ["Camada", "Tecnologia", "Responsabilidade"], rows, widths=[1.35, 2.3, 2.85])
     add_heading(doc, "Rotas e componentes", 2)
     for item in [
-        "/: landing pública da campanha.",
-        "/survey: wizard da pesquisa.",
+        "/: pesquisa oficial em página única.",
+        "/survey: caminho direto alternativo para a mesma pesquisa.",
+        "/survey-classic: alias da experiência one-page.",
+        "/survey-backup: backup do fluxo multi-step.",
+        "/landing-backup: backup da landing anterior.",
         "/complete: confirmação de conclusão.",
-        "Componentes: SurveyLayout, ProgressBar, RatingScale, OpenTextQuestion, AutosaveIndicator, ResumeBanner e CompletionState.",
+        "Componentes: ClassicSurveyExperience, RatingScale, campos de identificação, validação visual, exportações e dashboard.",
     ]:
         add_bullet(doc, item)
     add_heading(doc, "Modelo de dados", 2)
@@ -620,9 +624,9 @@ def add_roadmap(doc: Document) -> None:
     add_heading(doc, "10. Roadmap, backlog e plano de ação", 1)
     rows = [
         ["Fase 0", "Alinhamento", "Congelar perguntas, regras metodológicas, campos HubSpot e permissões."],
-        ["Fase 1", "MVP de alta conversão", "Landing, wizard, controle interno, autosave, retomada e persistência."],
+        ["Fase 1", "MVP de alta conversão", "Pesquisa one-page oficial, backup multi-step, controle interno e persistência."],
         ["Fase 2", "Analytics comportamental", "Clarity, PostHog, eventos, heatmaps e session replay."],
-        ["Fase 3", "Dashboard e planilha", "Funil, abandono, clientes silenciosos e exportação CSV/XLSX."],
+        ["Fase 3", "Dashboard e exportações", "Funil, abandono, clientes silenciosos e exportação CSV/Excel/PDF."],
         ["Fase 4", "Integração HubSpot", "Status no CRM, segmentos e lembretes comportamentais."],
         ["Fase 5", "Otimização CRO", "Testes A/B de landing, CTA e agrupamento, sem influenciar nota."],
         ["Fase 6", "Inteligência preditiva", "Score de risco, temas qualitativos e alertas para CS."],
@@ -632,7 +636,7 @@ def add_roadmap(doc: Document) -> None:
     for item in [
         "Criar banco e APIs de sessão/respostas.",
         "Persistir respostas reais e progresso.",
-        "Gerar exportação CSV/XLSX.",
+        "Gerar exportações CSV, Excel visual e PDF executivo.",
         "Criar dashboard interno inicial.",
         "Integrar Microsoft Clarity com mascaramento de dados.",
         "Preparar controle interno de respondentes para envio via HubSpot.",
@@ -661,20 +665,23 @@ def add_operation(doc: Document) -> None:
 
 def add_mvp_status(doc: Document) -> None:
     add_heading(doc, "12. Status do MVP atual", 1)
-    add_para(doc, "A primeira versão navegável já foi criada para validar a experiência do respondente e agora possui uma camada funcional de dados, dashboard interno, Clarity, exportação CSV e estados controlados para acessos incorretos.")
+    add_para(doc, "A primeira versão navegável já foi criada para validar a experiência do respondente e agora possui pesquisa oficial em página única, camada funcional de dados, dashboard interno, Clarity, exportações CSV/Excel/PDF e estados controlados para acessos incorretos.")
     rows = [
-        ["Implementado", "Next.js, landing compacta, fluxo multi-step, perguntas preservadas, autosave, APIs internas, Supabase preparado, dashboard interno protegido, exportação CSV, logo, identidade visual, Clarity e estados controlados para erro/link inválido."],
-        ["Ainda pendente", "Importação oficial de respondentes, XLSX, HubSpot, PostHog, GA4, subdomínio nps.primecontrol.com.br, refinamento final do dashboard e validação de campanha."],
+        ["Implementado", "Next.js, pesquisa one-page oficial na raiz, perguntas preservadas, perguntas numeradas, identificação simplificada, validação visual de e-mail corporativo, APIs internas, Supabase preparado, dashboard interno protegido, exportações CSV/Excel/PDF, logo, identidade visual, Clarity e backups de landing/multi-step."],
+        ["Ainda pendente", "Importação oficial de respondentes, integração HubSpot, PostHog, GA4, subdomínio nps.primecontrol.com.br, refinamento final do dashboard e validação de campanha."],
         ["Decisão técnica", "Evoluir o MVP para plataforma própria, usando Typeform apenas como benchmark ou fallback emergencial."],
     ]
     add_table(doc, ["Status", "Descrição"], rows, widths=[1.65, 4.85])
     add_heading(doc, "URLs de referência no ambiente local", 2)
     for item in [
-        "Raiz da plataforma: http://localhost:3000",
-        "Landing do respondente: http://localhost:3000/nps/demo-prime-control",
-        "Pesquisa multi-step: http://localhost:3000/nps/demo-prime-control/survey",
+        "Raiz da plataforma e pesquisa oficial: http://localhost:3000",
+        "Pesquisa oficial alternativa: http://localhost:3000/survey",
+        "Backup multi-step: http://localhost:3000/survey-backup",
+        "Backup landing: http://localhost:3000/landing-backup",
         "Dashboard interno: http://localhost:3000/admin",
         "Exportação CSV: http://localhost:3000/api/admin/export.csv",
+        "Exportação Excel: http://localhost:3000/api/admin/export.xls",
+        "Exportação PDF: http://localhost:3000/api/admin/export.pdf",
     ]:
         add_bullet(doc, item)
 
@@ -683,13 +690,13 @@ def add_current_implementation(doc: Document) -> None:
     add_heading(doc, "13. Implementação atual: dados, dashboard e Clarity", 1)
     add_para(
         doc,
-        "A plataforma deixou de ser apenas um protótipo visual e passou a operar como MVP funcional, com experiência pública, persistência de dados, dashboard interno protegido, exportação CSV e integração preparada com Microsoft Clarity.",
+        "A plataforma deixou de ser apenas um protótipo visual e passou a operar como MVP funcional, com experiência pública one-page, persistência de dados, dashboard interno protegido, exportações CSV/Excel/PDF e integração preparada com Microsoft Clarity.",
     )
     rows = [
         ["APIs internas", "Sessão, início, salvamento de respostas, conclusão e eventos."],
         ["Persistência MVP", "Supabase em produção quando configurado; fallback local JSON para validação funcional."],
-        ["Dashboard interno", "Visão de convidados, participação, conclusão, abandono, NPS parcial, score de fricção, clientes silenciosos e exportação."],
-        ["Exportação CSV", "Arquivo com identificação, status, datas, etapa e respostas."],
+        ["Dashboard interno", "Visão de convidados, participação, conclusão, abandono, NPS parcial, score de fricção, clientes silenciosos e exportações."],
+        ["Exportações", "CSV bruto, Excel visual em tons de cinza e PDF executivo resumido."],
         ["Clarity", "Script preparado via NEXT_PUBLIC_CLARITY_PROJECT_ID."],
     ]
     add_table(doc, ["Entrega", "Descrição"], rows, widths=[1.65, 4.85])
@@ -709,28 +716,27 @@ def add_ux_iteration(doc: Document) -> None:
     add_callout(
         doc,
         "Direção aprovada",
-        "Manter a experiência pública direta, leve e executiva. A tela inicial deve caber na primeira dobra sempre que possível, sem parecer uma landing pesada ou uma tela técnica.",
+        "Manter a experiência pública direta, leve e executiva. A raiz do site deve abrir a pesquisa oficial em página única, sem landing intermediária e sem informações técnicas internas.",
         fill=LIGHT_BLUE,
         accent=BLUE,
     )
     rows = [
-        ["Tela inicial", "Removido bloco lateral de 3 a 5 minutos; a informação permanece no topo.", "Evita redundância e melhora fluidez visual."],
-        ["Prazo", "Prazo de validade exibido como nota discreta: 01/06/2026.", "Cria senso de período ativo sem competir com o CTA."],
-        ["Blocos de confiança", "Mantidos três cards: Rápida, Responsável e Retomável.", "Preserva clareza e reduz ruído visual."],
+        ["Tela oficial", "A raiz do site abre diretamente a versão one-page da pesquisa.", "Reduz fricção e elimina etapa intermediária."],
+        ["Prazo", "Prazo de validade exibido no topo: 01/06/2026.", "Deixa claro o período ativo da campanha."],
+        ["Seções", "Títulos sem numeração; perguntas numeradas de forma discreta.", "Facilita referência e leitura sem poluir a hierarquia."],
         ["Identificação", "Campos usam placeholders, sem valores fictícios preenchidos.", "Evita o trabalho de apagar dados de exemplo."],
-        ["Validação", "E-mail deve ser corporativo antes de avançar.", "Protege a qualidade da base e reduz respostas fora do público-alvo."],
-        ["Retomada", "A pesquisa pública não deve bloquear por resposta antiga salva no navegador.", "Evita falso positivo de conclusão em testes e acessos compartilhados."],
-        ["Tom", "Texto mais natural: a Prime Control quer ouvir o cliente.", "Reforça cuidado e convite direto."],
-        ["Tela inicial", "Raiz do site exibe a landing real da pesquisa.", "Evita tela intermediária e reduz confusão."],
+        ["Identificação", "Campo Área removido; Cargo permanece.", "Reduz esforço sem perda relevante para segmentação operacional."],
+        ["Validação", "E-mail corporativo exibe feedback visual imediato quando inválido ou pessoal.", "Protege qualidade da base e reduz erro apenas no fim do envio."],
+        ["Exportações", "Dashboard interno oferece CSV, Excel visual e PDF executivo.", "Apoia análise operacional e apresentação executiva."],
         ["Pesquisa não localizada", "Acesso inválido mostra mensagem controlada.", "Evita tela vazia, erro bruto ou criação de pesquisa indevida."],
         ["Erro global", "Criada tela de instabilidade com ação de recarregar.", "Reduz ansiedade e melhora recuperação."],
     ]
     add_table(doc, ["Ponto", "Decisão", "Racional"], rows, widths=[1.35, 2.65, 2.5])
     add_heading(doc, "Regras de aceite da experiência pública", 2)
     for item in [
-        "A landing não deve exibir informações técnicas internas.",
-        "O topo deve mostrar apenas o tempo estimado; a validade deve aparecer de forma discreta no conteúdo.",
-        "A primeira dobra deve conter logo, contexto, benefício, transparência e CTA.",
+        "A pesquisa oficial não deve exibir informações técnicas internas.",
+        "O topo deve mostrar tempo estimado e validade da campanha de forma clara.",
+        "A identificação deve exigir apenas nome, e-mail corporativo, empresa e cargo.",
         "Acesso inexistente não deve criar uma nova pesquisa automaticamente.",
         "O cliente deve sempre receber uma orientação clara, mesmo em erro ou link incompleto.",
     ]:
@@ -754,7 +760,7 @@ def add_governance(doc: Document) -> None:
     add_callout(
         doc,
         "Próximo marco documental",
-        "Após a implementação da camada de dados, o documento deve incluir prints do dashboard, exemplo de planilha exportada, eventos reais capturados e leitura inicial do Clarity.",
+        "Após a validação com usuários internos, o documento deve incluir prints finais da pesquisa oficial, exemplo real de Excel/PDF exportado, eventos capturados e leitura inicial do Clarity.",
         fill="FFF2E8",
         accent=ORANGE,
     )
@@ -791,8 +797,12 @@ def build() -> None:
     add_ux_iteration(doc)
     add_governance(doc)
 
-    doc.save(DOCX_PATH)
-    print(DOCX_PATH)
+    try:
+        doc.save(DOCX_PATH)
+        print(DOCX_PATH)
+    except PermissionError:
+        doc.save(DOCX_FALLBACK_PATH)
+        print(DOCX_FALLBACK_PATH)
 
 
 if __name__ == "__main__":
