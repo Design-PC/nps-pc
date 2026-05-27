@@ -35,7 +35,7 @@ Registrar a primeira versao navegavel da plataforma NPS Prime Control.
 - O MVP usa `localStorage` para autosave enquanto o backend nao esta implementado.
 - O token ainda e demonstrativo e nao validado em banco.
 - A integracao com HubSpot, PostHog, Clarity e GA4 esta preparada conceitualmente, mas ainda nao conectada.
-- A escala esta apresentada de 1 a 10 para reduzir carga cognitiva. Esta decisao deve ser validada metodologicamente antes da campanha oficial.
+- A escala NPS 2026 esta apresentada de 0 a 10, conforme pergunta oficial. As perguntas de satisfacao usam escala de 1 a 5.
 
 ## Proximas Evolucoes
 
@@ -47,4 +47,3 @@ Registrar a primeira versao navegavel da plataforma NPS Prime Control.
 6. Conectar PostHog, Clarity e GA4.
 7. Integrar HubSpot.
 8. Criar dashboard executivo.
-

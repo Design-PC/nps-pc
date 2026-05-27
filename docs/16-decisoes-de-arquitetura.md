@@ -2,7 +2,7 @@
 
 ## Decisoes Confirmadas
 
-- Escala visual da pesquisa: 1 a 10.
+- Escala visual da pesquisa 2026: NPS de 0 a 10 e satisfacao de 1 a 5.
 - Respostas: identificadas, nao anonimas.
 - Regra de resposta: um contato responde uma unica vez.
 - Selecao de respondentes: time operacional indicara o responsavel de cada cliente.
@@ -86,4 +86,3 @@ No sistema, vamos:
 - testar se as sessoes aparecem;
 - validar heatmaps e replays;
 - documentar a configuracao final.
-

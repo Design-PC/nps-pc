@@ -148,14 +148,14 @@ export async function GET() {
     { text: "" },
     { text: "Distribuicao NPS oficial", size: 14, bold: true },
     {
-      text: `Promotores 9-10: ${promoterPercent}% (${data.npsDistribution.promoters}) | Neutros 7-8: ${passivePercent}% (${data.npsDistribution.passives}) | Detratores 1-6: ${detractorPercent}% (${data.npsDistribution.detractors})`,
+      text: `Promotores 9-10: ${promoterPercent}% (${data.npsDistribution.promoters}) | Neutros 7-8: ${passivePercent}% (${data.npsDistribution.passives}) | Detratores 0-6: ${detractorPercent}% (${data.npsDistribution.detractors})`,
     },
     { text: `Formula: ${promoterPercent}% promotores - ${detractorPercent}% detratores = ${data.summary.npsScore ?? "-"}` },
     { text: "Neutros entram na base total, mas nao somam nem subtraem na nota final." },
     { text: "" },
-    { text: "Leitura tematica - 4 blocos com peso de 25%", size: 14, bold: true },
+    { text: "Medias da avaliacao 1 a 5", size: 14, bold: true },
     ...data.categoryScores.map((item) => ({
-      text: `${item.category}: ${item.average ?? "-"} | Peso visual: 25%`,
+      text: `${item.category}: ${item.average ?? "-"}`,
     })),
     { text: "" },
     { text: "Funil da jornada", size: 14, bold: true },

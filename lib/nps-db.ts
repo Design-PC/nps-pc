@@ -587,7 +587,7 @@ export async function getDashboardData() {
 
   const npsScores = db.sessions
     .map((session) => Number(session.answers.nps_recommendation))
-    .filter((score) => Number.isFinite(score));
+    .filter((score) => Number.isFinite(score) && score >= 0 && score <= 10);
   const promoters = npsScores.filter((score) => score >= 9).length;
   const passives = npsScores.filter((score) => score >= 7 && score <= 8).length;
   const detractors = npsScores.filter((score) => score <= 6).length;
@@ -633,7 +633,7 @@ export async function getDashboardData() {
 
   const categoryAverages = surveySteps
     .flatMap((step) => step.questions)
-    .filter((question) => question.type === "rating")
+    .filter((question) => question.type === "rating" && question.id !== "nps_recommendation")
     .reduce(
       (categories, question) => {
         const values = db.sessions

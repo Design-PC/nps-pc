@@ -18,12 +18,10 @@ type ClassicSection = {
   id: string;
   title: string;
   scale: string;
-  scoreOptions: number[];
   questions: ClassicQuestion[];
 };
 
-const npsScoreOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const satisfactionScoreOptions = [1, 2, 3, 4, 5];
+const scoreOptions = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
 const personalEmailDomains = [
   "gmail.com",
@@ -48,116 +46,143 @@ const identityFields = [
     type: "email",
   },
   { id: "identity_company", label: "Empresa", placeholder: "Empresa" },
-  { id: "identity_area", label: "Área", placeholder: "Área" },
   { id: "identity_role", label: "Cargo", placeholder: "Cargo" },
 ];
 
 const sections: ClassicSection[] = [
   {
-    id: "recomendacao",
-    title: "Recomendação",
-    scale: "Escala: 0 = nada provável e 10 = muito provável",
-    scoreOptions: npsScoreOptions,
+    id: "relacionamento-satisfacao",
+    title: "Relacionamento e Satisfação",
+    scale: "Escala: 10 = muito provável e 1 = nada provável",
     questions: [
       {
         id: "nps_recommendation",
         type: "rating",
         required: true,
-        label: "Qual a probabilidade de você recomendar a Prime Control para outras empresas?",
+        label:
+          "Qual a probabilidade de você recomendar a Prime Control para outras empresas?",
       },
       {
         id: "nps_reason",
         type: "text",
-        label: "O que a Prime Control faz bem hoje que te levou a dar essa nota?",
+        label: "Qual foi o principal motivo para a nota atribuída?",
       },
     ],
   },
   {
-    id: "avaliacao-parceria",
-    title: "Avaliação da parceria",
-    scale: "Escala: 1 = nada satisfeito e 5 = muito satisfeito",
-    scoreOptions: satisfactionScoreOptions,
+    id: "percepcao-valor",
+    title: "Percepção de Valor",
+    scale: "Escala: 10 = muito satisfeito e 1 = nada satisfeito",
     questions: [
       {
-        id: "innovation_relevance",
+        id: "value_business_attention",
         type: "rating",
         required: true,
         label:
-          "Você percebe que a Prime Control entrega soluções inovadoras e relevantes para o seu negócio?",
+          "Como você avalia a Prime Control em relação ao entendimento do seu negócio?",
       },
       {
-        id: "innovation_expectation",
-        type: "text",
-        label:
-          "O que você esperaria de uma empresa inovadora que ainda não percebe na atuação da Prime Control?",
-      },
-      {
-        id: "contracted_services",
+        id: "value_solution_relevance",
         type: "rating",
         required: true,
         label:
-          "Como você avalia os serviços prestados pela Prime Control em relação ao que foi contratado?",
+          "Como você avalia a relevância das soluções entregues para os desafios da sua empresa?",
       },
       {
-        id: "business_knowledge",
-        type: "rating",
-        required: true,
-        label: "Como você avalia o nosso conhecimento do seu negócio?",
-      },
-      {
-        id: "delivery_quality",
-        type: "rating",
-        required: true,
-        label: "Como você avalia a qualidade das nossas entregas?",
-      },
-      {
-        id: "delivery_communication",
-        type: "rating",
-        required: true,
-        label: "Você se sente bem informado sobre o andamento e os resultados das entregas?",
-      },
-      {
-        id: "problem_solving_engagement",
-        type: "rating",
-        required: true,
-        label: "Como você avalia o nosso engajamento na solução de problemas?",
-      },
-      {
-        id: "deadline_delivery",
-        type: "rating",
-        required: true,
-        label: "Como você avalia as entregas da Prime Control dentro dos prazos acordados?",
-      },
-      {
-        id: "result_presentations",
+        id: "value_perceived",
         type: "rating",
         required: true,
         label:
-          "As nossas apresentações de resultados são claras, objetivas e relevantes para o seu negócio?",
+          "As soluções da Prime Control têm gerado valor percebido para o seu negócio?",
       },
       {
-        id: "perceived_value",
+        id: "value_results_commitment",
         type: "rating",
         required: true,
-        label: "As soluções da Prime Control têm gerado valor percebido para o seu negócio?",
+        label: "Como você avalia nosso comprometimento com resultados?",
       },
       {
-        id: "service_quality",
+        id: "value_problem_solving",
         type: "rating",
         required: true,
-        label: "Como você avalia a qualidade do atendimento recebido pela nossa equipe?",
+        label: "Como você avalia nosso engajamento na solução de problemas?",
+      },
+    ],
+  },
+  {
+    id: "qualidade-operacional",
+    title: "Qualidade Operacional",
+    scale: "Escala: 10 = muito satisfeito e 1 = nada satisfeito",
+    questions: [
+      {
+        id: "ops_delivery_quality",
+        type: "rating",
+        required: true,
+        label: "Como você avalia a qualidade das entregas realizadas?",
       },
       {
-        id: "response_time",
+        id: "ops_deadlines",
+        type: "rating",
+        required: true,
+        label: "Como você avalia o cumprimento dos prazos acordados?",
+      },
+      {
+        id: "ops_result_clarity",
+        type: "rating",
+        required: true,
+        label:
+          "Como você avalia a clareza e objetividade das apresentações de resultados?",
+      },
+      {
+        id: "ops_response_time",
         type: "rating",
         required: true,
         label: "Como você avalia o tempo de resposta da nossa equipe?",
       },
       {
-        id: "partnership_improvements",
+        id: "ops_service_quality",
+        type: "rating",
+        required: true,
+        label: "Como você avalia a qualidade do atendimento recebido?",
+      },
+    ],
+  },
+  {
+    id: "inovacao-futuro",
+    title: "Inovação, Transformação e Futuro",
+    scale: "Escala: 10 = muito satisfeito e 1 = nada satisfeito",
+    questions: [
+      {
+        id: "future_innovative_company",
+        type: "rating",
+        required: true,
+        label:
+          "Você percebe a Prime Control como uma empresa inovadora e alinhada às tendências do mercado?",
+      },
+      {
+        id: "future_trend_anticipation",
+        type: "rating",
+        required: true,
+        label:
+          "Como você avalia a capacidade da Prime Control antecipar tendências e propor soluções para os desafios do seu negócio?",
+      },
+      {
+        id: "future_innovation_areas",
         type: "text",
         label:
-          "Quais entregas, melhorias ou iniciativas da Prime Control fariam sentido para ampliar nossa parceria e gerar ainda mais valor para o seu negócio?",
+          "Em quais áreas você acredita que a Prime Control poderia investir mais em inovação para fortalecer ainda mais nossa parceria?",
+      },
+      {
+        id: "future_strategic_partner_expectation",
+        type: "text",
+        label:
+          "O que você espera de uma empresa parceira estratégica que ainda não percebe na atuação da Prime Control?",
+      },
+      {
+        id: "future_partnership_improvements",
+        type: "text",
+        label:
+          "Quais iniciativas, soluções ou melhorias podem ampliar nossa parceria e gerar ainda mais valor para o seu negócio?",
       },
     ],
   },
@@ -176,10 +201,6 @@ function isCorporateEmail(value: string) {
   const domain = email.split("@")[1] ?? "";
 
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !personalEmailDomains.includes(domain);
-}
-
-function hasAnswer(value: AnswerValue | undefined) {
-  return value !== undefined && String(value).trim().length > 0;
 }
 
 export function ClassicSurveyExperience() {
@@ -202,7 +223,7 @@ export function ClassicSurveyExperience() {
   useEffect(() => {
     trackEvent("survey_classic_viewed", {
       campaign_id: "prime-control-nps-2026",
-      variant: "classic_one_page_2026",
+      variant: "classic_one_page",
     });
 
     fetch(`/api/nps/session/${sessionToken}/start`, { method: "POST" }).catch(() => {
@@ -233,7 +254,7 @@ export function ClassicSurveyExperience() {
       return "Use seu e-mail corporativo para continuar.";
     }
 
-    const missingRating = requiredRatings.find((questionId) => !hasAnswer(answers[questionId]));
+    const missingRating = requiredRatings.find((questionId) => !answers[questionId]);
 
     if (missingRating) {
       return "Selecione uma nota para todas as perguntas de escala.";
@@ -249,7 +270,7 @@ export function ClassicSurveyExperience() {
       setError(validationMessage);
       trackEvent("survey_classic_validation_error", {
         message: validationMessage,
-        variant: "classic_one_page_2026",
+        variant: "classic_one_page",
       });
       return;
     }
@@ -273,7 +294,7 @@ export function ClassicSurveyExperience() {
 
       trackEvent("survey_classic_completed", {
         campaign_id: "prime-control-nps-2026",
-        variant: "classic_one_page_2026",
+        variant: "classic_one_page",
       });
 
       window.location.href = "/complete";
@@ -304,17 +325,17 @@ export function ClassicSurveyExperience() {
           </a>
           <div className="topbar-meta">
             <span className="status-pill">Tempo estimado: 3 a 5 minutos</span>
-            <span className="status-pill subtle">Disponível por 7 dias após o envio</span>
+            <span className="status-pill subtle">Disponível até 01/06/2026</span>
           </div>
         </header>
 
         <section className="panel classic-sheet" aria-labelledby="classic-title">
           <div className="classic-accent" />
           <div className="classic-heading">
-            <h1 id="classic-title">Pesquisa de Satisfação | NPS | 2026</h1>
+            <h1 id="classic-title">Pesquisa de Satisfação | NPS | Maio 2026</h1>
             <p>
-              Sua percepção ajuda a Prime Control a priorizar melhorias e gerar mais valor ao seu
-              negócio.
+              Sua percepção ajuda a Prime Control a priorizar melhorias e gerar mais
+              valor ao seu negócio.
             </p>
           </div>
 
@@ -377,7 +398,7 @@ export function ClassicSurveyExperience() {
 
                         {question.type === "rating" ? (
                           <div className="classic-scale" aria-label={`Nota para: ${question.label}`}>
-                            {section.scoreOptions.map((score) => (
+                            {scoreOptions.map((score) => (
                               <button
                                 aria-pressed={answers[question.id] === score}
                                 className={`classic-score ${

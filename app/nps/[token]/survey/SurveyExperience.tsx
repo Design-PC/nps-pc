@@ -382,8 +382,10 @@ export function SurveyExperience({
       token: sessionToken,
       step_id: step.id,
       time_on_step_seconds: timeOnStep,
-      answered_count: step.questions.filter((question) => answers[question.id])
-        .length,
+      answered_count: step.questions.filter((question) => {
+        const answer = answers[question.id];
+        return answer !== undefined && String(answer).trim().length > 0;
+      }).length,
     });
 
     if (isLastStep) {
@@ -602,7 +604,10 @@ function QuestionBlock({ question, answer, onChange }: QuestionBlockProps) {
       {question.type === "rating" ? (
         <>
           <div className="scale" role="radiogroup" aria-label={question.label}>
-            {Array.from({ length: 10 }, (_, index) => index + 1).map((score) => (
+            {(question.scale === "nps_0_10"
+              ? Array.from({ length: 11 }, (_, index) => index)
+              : Array.from({ length: 5 }, (_, index) => index + 1)
+            ).map((score) => (
               <button
                 aria-checked={answer === score}
                 className={`scale-button ${answer === score ? "selected" : ""}`}
@@ -616,8 +621,17 @@ function QuestionBlock({ question, answer, onChange }: QuestionBlockProps) {
             ))}
           </div>
           <div className="scale-labels">
-            <span>1 = nada satisfeito/provável</span>
-            <span>10 = muito satisfeito/provável</span>
+            {question.scale === "nps_0_10" ? (
+              <>
+                <span>0 = nada provável</span>
+                <span>10 = muito provável</span>
+              </>
+            ) : (
+              <>
+                <span>1 = nada satisfeito</span>
+                <span>5 = muito satisfeito</span>
+              </>
+            )}
           </div>
         </>
       ) : (

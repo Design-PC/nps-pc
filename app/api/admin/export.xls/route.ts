@@ -64,15 +64,15 @@ export async function GET() {
       <table>
         ${metric("Promotores | notas 9-10", `${promoterPercent}% (${dashboard.npsDistribution.promoters})`)}
         ${metric("Neutros | notas 7-8", `${passivePercent}% (${dashboard.npsDistribution.passives})`)}
-        ${metric("Detratores | notas 1-6", `${detractorPercent}% (${dashboard.npsDistribution.detractors})`)}
+        ${metric("Detratores | notas 0-6", `${detractorPercent}% (${dashboard.npsDistribution.detractors})`)}
         ${metric("Fórmula aplicada", `${promoterPercent}% promotores - ${detractorPercent}% detratores = ${dashboard.summary.npsScore ?? "-"}`)}
       </table>
-      <div class="small-note">Neutros entram na base total, mas não somam nem subtraem na nota final. Os 4 blocos da pesquisa aparecem como leitura temática com peso visual de 25% cada.</div>
+      <div class="small-note">Neutros entram na base total, mas não somam nem subtraem na nota final. As médias abaixo consideram apenas perguntas de satisfação na escala de 1 a 5.</div>
 
-      <h2>Leitura temática | 25% por bloco</h2>
+      <h2>Médias da avaliação | escala 1 a 5</h2>
       <table>
         ${dashboard.categoryScores
-          .map((item) => metric(`${item.category} | peso 25%`, item.average ?? "-"))
+          .map((item) => metric(item.category, item.average ?? "-"))
           .join("")}
       </table>
 

@@ -483,7 +483,8 @@ def add_experience(doc: Document) -> None:
         "A decisão metodológica preferencial é manter a escala clara e neutra. A versão oficial atual segue a referência visual aprovada pela área, com quadradinhos de 10 a 1 ao lado da pergunta; esse ponto deve ser monitorado em analytics para confirmar se não aumenta erro de clique ou hesitação.",
     )
     rows = [
-        ["10 → 1", "Formato atual da interface oficial", "Mantém alinhamento com a referência de planilha/GPTW enviada."],
+        ["0 → 10", "Formato atual da pergunta NPS 2026", "Mantém alinhamento com a referência oficial enviada para 2026."],
+        ["1 → 5", "Formato atual das perguntas de satisfação 2026", "Reduz esforço de escolha nas avaliações complementares."],
         ["1 → 10", "Alternativa metodologicamente mais natural para leitura", "Pode ser testada depois, se houver indício de erro, hesitação ou confusão."],
         ["Sem destaque prévio do 10", "Neutralidade visual", "Evita sinalizar que a empresa espera uma resposta positiva."],
     ]
@@ -725,7 +726,7 @@ def add_ux_iteration(doc: Document) -> None:
     )
     rows = [
         ["Tela oficial", "A raiz do site abre diretamente a versão one-page da pesquisa.", "Reduz fricção e elimina etapa intermediária."],
-        ["Prazo", "Prazo de validade exibido no topo: 01/06/2026.", "Deixa claro o período ativo da campanha."],
+        ["Prazo", "Prazo exibido no topo: disponível por 7 dias após o envio.", "Funciona melhor para disparos em datas diferentes via e-mail/HubSpot."],
         ["Seções", "Títulos sem numeração; perguntas numeradas de forma discreta.", "Facilita referência e leitura sem poluir a hierarquia."],
         ["Identificação", "Campos usam placeholders, sem valores fictícios preenchidos.", "Evita o trabalho de apagar dados de exemplo."],
         ["Identificação", "Campo Área removido; Cargo permanece.", "Reduz esforço sem perda relevante para segmentação operacional."],

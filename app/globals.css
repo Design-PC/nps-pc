@@ -430,7 +430,7 @@ h2 {
 
 .scale {
   display: grid;
-  grid-template-columns: repeat(10, minmax(42px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
   gap: 8px;
 }
 
@@ -1248,7 +1248,7 @@ button:focus-visible,
 
 .classic-identity-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1.2fr 1fr 0.9fr;
+  grid-template-columns: 1.1fr 1.2fr 1fr 0.9fr 0.9fr;
   gap: 10px;
   margin-top: 12px;
 }
@@ -1363,13 +1363,14 @@ button:focus-visible,
 }
 
 .classic-scale {
-  display: grid;
-  grid-template-columns: repeat(10, 34px);
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .classic-score {
   display: grid;
   width: 34px;
+  flex: 0 0 34px;
   min-height: 38px;
   place-items: center;
   border: 1px solid transparent;
@@ -1479,11 +1480,12 @@ button:focus-visible,
   }
 
   .classic-scale {
-    grid-template-columns: repeat(5, minmax(48px, 1fr));
+    flex-wrap: wrap;
   }
 
   .classic-score {
     width: auto;
+    flex: 1 0 calc(20% - 1px);
     min-height: 42px;
     border-color: #cddbe8;
     background: #ffffff;
@@ -1659,11 +1661,12 @@ button:focus-visible,
   }
 
   .classic-scale {
-    grid-template-columns: repeat(5, minmax(44px, 1fr));
+    flex-wrap: wrap;
   }
 
   .classic-score {
     width: auto;
+    flex: 1 0 calc(20% - 1px);
     min-height: 42px;
     border-color: #cddbe8;
     background: #ffffff;

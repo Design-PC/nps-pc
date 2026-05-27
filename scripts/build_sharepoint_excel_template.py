@@ -41,24 +41,22 @@ BASE_HEADERS = [
     "Tempo de conclusão (min)",
     "Dispositivo",
     "Navegador",
-    "Nota NPS (1 a 10)",
+    "Nota NPS (0 a 10)",
     "Classificação NPS",
-    "Motivo da nota",
-    "Entendimento do negócio",
-    "Relevância das soluções entregues",
-    "Valor percebido",
-    "Comprometimento com resultados",
-    "Engajamento na solução de problemas",
+    "O que a Prime Control faz bem hoje",
+    "Soluções inovadoras e relevantes",
+    "Expectativa sobre empresa inovadora",
+    "Serviços conforme contratado",
+    "Conhecimento do negócio",
     "Qualidade das entregas",
-    "Cumprimento dos prazos",
-    "Clareza e objetividade",
-    "Tempo de resposta da equipe",
+    "Informação sobre andamento e resultados",
+    "Engajamento na solução de problemas",
+    "Entregas dentro dos prazos",
+    "Apresentações claras e relevantes",
+    "Valor percebido",
     "Qualidade do atendimento",
-    "Empresa inovadora e alinhada ao mercado",
-    "Antecipar tendências e propor soluções",
-    "Áreas para investir mais em inovação",
-    "Expectativa sobre parceria estratégica",
-    "Iniciativas/melhorias para gerar mais valor",
+    "Tempo de resposta da equipe",
+    "Entregas, melhorias ou iniciativas para ampliar parceria",
     "Perguntas respondidas",
     "Campos abertos preenchidos",
     "Etapa abandonada",
@@ -85,7 +83,7 @@ DICTIONARY_ROWS = [
     ("E-mail corporativo", "E-mail corporativo validado no formulário.", "Pesquisa", "Não"),
     ("Cargo", "Cargo informado pelo respondente.", "Pesquisa", "Não"),
     ("Responsável Prime Control", "Pessoa interna responsável pelo relacionamento.", "Manual interno", "Sim"),
-    ("Nota NPS (1 a 10)", "Nota da pergunta de recomendação.", "Pesquisa", "Não"),
+    ("Nota NPS (0 a 10)", "Nota da pergunta de recomendação.", "Pesquisa", "Não"),
     ("Classificação NPS", "Promotor, Neutro ou Detrator, calculado pela nota.", "Sistema", "Não"),
     ("Motivo da nota", "Resposta aberta sobre o motivo da nota.", "Pesquisa", "Não"),
     ("Perguntas respondidas", "Quantidade de respostas preenchidas.", "Sistema", "Não"),
@@ -251,7 +249,7 @@ def build_dashboard(ws):
         ("Grupo", "Faixa", "Qtd.", "% da base"),
         ("Promotores", "Notas 9-10", '=COUNTIFS(\'Base automática\'!Q:Q,">=9")', '=IFERROR(C13/SUM($C$13:$C$15),0)'),
         ("Neutros", "Notas 7-8", '=COUNTIFS(\'Base automática\'!Q:Q,">=7",\'Base automática\'!Q:Q,"<=8")', '=IFERROR(C14/SUM($C$13:$C$15),0)'),
-        ("Detratores", "Notas 1-6", '=COUNTIFS(\'Base automática\'!Q:Q,"<=6")', '=IFERROR(C15/SUM($C$13:$C$15),0)'),
+        ("Detratores", "Notas 0-6", '=COUNTIFS(\'Base automática\'!Q:Q,"<=6")', '=IFERROR(C15/SUM($C$13:$C$15),0)'),
         ("Fórmula", "Promotores - Detratores", "", '=IFERROR(D13-D15,0)'),
     ]
     for r, row in enumerate(nps_table, 12):
@@ -262,25 +260,28 @@ def build_dashboard(ws):
     for row in range(13, 17):
         ws.cell(row, 4).number_format = "0%"
 
-    ws["F11"] = "Leitura temática | 25% por bloco"
+    ws["F11"] = "Médias da avaliação | escala 1 a 5"
     style_section(ws["F11"])
     ws.merge_cells("F11:H11")
     themes = [
-        ("Relacionamento e Satisfação", "25%", '=IFERROR(AVERAGE(\'Base automática\'!Q:Q),"")'),
-        ("Percepção de Valor", "25%", '=IFERROR(SUM(\'Base automática\'!T:X)/COUNT(\'Base automática\'!T:X),"")'),
-        ("Qualidade Operacional", "25%", '=IFERROR(SUM(\'Base automática\'!Y:AC)/COUNT(\'Base automática\'!Y:AC),"")'),
-        ("Inovação, Transformação e Futuro", "25%", '=IFERROR(SUM(\'Base automática\'!AD:AE)/COUNT(\'Base automática\'!AD:AE),"")'),
+        ("Inovação e relevância", "1 a 5", '=IFERROR(AVERAGE(\'Base automática\'!T:T),"")'),
+        ("Execução contratada", "1 a 5", '=IFERROR(AVERAGE(\'Base automática\'!V:V),"")'),
+        ("Conhecimento e parceria", "1 a 5", '=IFERROR(SUM(\'Base automática\'!W:W,\'Base automática\'!Z:Z)/COUNT(\'Base automática\'!W:W,\'Base automática\'!Z:Z),"")'),
+        ("Entregas", "1 a 5", '=IFERROR(SUM(\'Base automática\'!X:X,\'Base automática\'!AA:AA)/COUNT(\'Base automática\'!X:X,\'Base automática\'!AA:AA),"")'),
+        ("Comunicação", "1 a 5", '=IFERROR(SUM(\'Base automática\'!Y:Y,\'Base automática\'!AB:AB)/COUNT(\'Base automática\'!Y:Y,\'Base automática\'!AB:AB),"")'),
+        ("Valor percebido", "1 a 5", '=IFERROR(AVERAGE(\'Base automática\'!AC:AC),"")'),
+        ("Atendimento", "1 a 5", '=IFERROR(AVERAGE(\'Base automática\'!AD:AE),"")'),
     ]
     ws.append([])
-    for r, row in enumerate([("Bloco", "Peso", "Média")] + themes, 12):
+    for r, row in enumerate([("Dimensão", "Escala", "Média")] + themes, 12):
         for c, value in enumerate(row, 6):
             ws.cell(r, c, value)
     style_header(ws[12][5:8])
-    style_table(ws, 12, 16, 6, 8)
+    style_table(ws, 12, 19, 6, 8)
 
-    ws["A19"] = "Fluxo SharePoint/OneDrive"
-    style_section(ws["A19"])
-    ws.merge_cells("A19:H19")
+    ws["A23"] = "Fluxo SharePoint/OneDrive"
+    style_section(ws["A23"])
+    ws.merge_cells("A23:H23")
     flow = [
         "1. Subir este arquivo no SharePoint/OneDrive da empresa.",
         "2. Manter a aba Base automática como destino da integração.",
@@ -288,7 +289,7 @@ def build_dashboard(ws):
         "4. O time pode criar análises manuais em novas abas sem alterar a Base automática.",
         "5. Heatmaps e replays continuam no Microsoft Clarity; a planilha recebe apenas link opcional quando houver análise manual.",
     ]
-    for idx, text in enumerate(flow, 20):
+    for idx, text in enumerate(flow, 24):
         ws.cell(idx, 1, text)
         ws.merge_cells(start_row=idx, start_column=1, end_row=idx, end_column=8)
         ws.cell(idx, 1).font = Font(name="Calibri", size=10, color=TEXT)

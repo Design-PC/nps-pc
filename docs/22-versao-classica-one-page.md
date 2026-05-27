@@ -13,7 +13,8 @@ Consolidar a pesquisa em página única como experiência oficial da campanha, i
 - O fluxo multi-step anterior foi preservado como backup em `/survey-backup`.
 - Todas as perguntas aparecem em uma única página.
 - As perguntas são numeradas de forma discreta para facilitar orientação e referência interna.
-- As perguntas de escala usam quadradinhos ao lado da pergunta, na ordem visual `10 9 8 7 6 5 4 3 2 1`, conforme a referência enviada.
+- A pergunta NPS usa escala `0 1 2 3 4 5 6 7 8 9 10`.
+- As perguntas de satisfação usam escala `1 2 3 4 5`.
 - Os campos abertos aparecem como áreas de resposta diretas, sem rótulos internos operacionais.
 - A identificação fica no topo, em formato compacto, com placeholders para evitar esforço de apagar textos preenchidos.
 - A versão em página única passa a ser a experiência principal da campanha.

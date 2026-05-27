@@ -71,7 +71,7 @@ export default async function AdminDashboardPage() {
     },
     {
       label: "Detratores",
-      range: "Notas 1-6",
+      range: "Notas 0-6",
       value: data.npsDistribution.detractors,
       percent: distributionPercent(data.npsDistribution.detractors, npsTotal),
     },
@@ -252,23 +252,23 @@ export default async function AdminDashboardPage() {
 
           <div className="panel admin-section theme-panel">
             <div className="section-heading">
-              <p className="eyebrow">Leitura temática</p>
-              <h2>4 blocos com peso de 25%</h2>
+              <p className="eyebrow">Avaliação 1 a 5</p>
+              <h2>Médias por dimensão</h2>
             </div>
             <div className="category-list-v2">
               {data.categoryScores.map((item) => (
                 <div className="category-row-v2" key={item.category}>
                   <span>{item.category}</span>
                   <div>
-                    <small>25%</small>
+                    <small>média</small>
                     <strong>{item.average ?? "-"}</strong>
                   </div>
                 </div>
               ))}
             </div>
             <p className="source-note compact">
-              Os 25% organizam a leitura dos blocos da pesquisa. O NPS oficial continua sendo
-              calculado apenas pela pergunta de recomendação.
+              Médias calculadas apenas com as perguntas de satisfação de 1 a 5. O NPS oficial
+              permanece separado e usa somente a pergunta de recomendação.
             </p>
           </div>
         </section>

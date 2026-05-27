@@ -14,7 +14,7 @@ Manter o dashboard interno como uma central de decisão da campanha NPS, com lei
 - Bloco de próximos movimentos enxuto, sem textos longos.
 - Distribuição NPS reorganizada com percentuais automáticos por grupo: promotores 9-10, neutros 7-8 e detratores 1-6.
 - Fórmula do NPS exibida no painel: percentual de promotores menos percentual de detratores.
-- Leitura temática 2026 atualizada para médias por dimensão na escala de 1 a 5, sem alterar o cálculo oficial do NPS.
+- Leitura temática exibida em 4 blocos com peso visual de 25% cada, sem alterar o cálculo oficial do NPS.
 - Tabela de respondentes mantida como detalhe operacional.
 - Exportação PDF corrigida para gerar arquivo PDF válido e compatível com leitores comuns.
 
@@ -25,7 +25,7 @@ Manter o dashboard interno como uma central de decisão da campanha NPS, com lei
 3. KPIs executivos.
 4. Jornada e abandono.
 5. Próximas ações.
-6. Médias por dimensão da escala 1 a 5.
+6. Leituras analíticas.
 7. Base detalhada.
 
 ## Origem dos dados
@@ -34,15 +34,15 @@ O dashboard usa dados registrados pela própria plataforma: contatos, sessões, 
 
 ## Cálculo NPS
 
-O NPS oficial usa somente a pergunta de recomendação. Na versão 2026, a escala da pergunta NPS é de 0 a 10:
+O NPS oficial usa somente a pergunta de recomendação. A escala da pesquisa é de 1 a 10:
 
 - Promotores: notas 9 e 10.
 - Neutros: notas 7 e 8.
-- Detratores: notas 0 a 6.
+- Detratores: notas 1 a 6.
 
 Fórmula: `% promotores - % detratores`.
 
-Os neutros entram na base total de respostas, mas não somam nem subtraem diretamente. Na versão 2026, as demais perguntas são analisadas separadamente por médias de satisfação na escala de 1 a 5.
+Os neutros entram na base total de respostas, mas não somam nem subtraem diretamente. A leitura de 25% por bloco é uma organização executiva dos quatro temas da pesquisa, não uma alteração do cálculo metodológico do NPS.
 
 ## Critérios de aceite
 

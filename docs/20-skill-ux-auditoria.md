@@ -60,4 +60,4 @@ Pontos de atencao:
 - revisar a contagem "5 de 22 respostas" na etapa de identificacao, pois os campos pre-preenchidos podem inflar a percepcao de progresso;
 - avaliar se os campos de identificacao devem ser editaveis ou apenas confirmaveis quando o contato ja vier do CRM;
 - garantir que o botao de continuidade fique sempre visivel ou facil de acessar em telas menores;
-- manter a escala de 1 a 10, pois esta ordem reduz friccao cognitiva para leitura no Brasil.
+- para a campanha 2026, manter NPS de 0 a 10 e satisfacao de 1 a 5, pois estas escalas foram definidas oficialmente.

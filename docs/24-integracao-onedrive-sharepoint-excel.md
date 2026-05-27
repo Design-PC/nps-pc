@@ -65,7 +65,7 @@ O link da planilha SharePoint/OneDrive foi recebido no projeto, mas não deve se
 
 ### NPS oficial
 
-- Nota NPS, de 1 a 10
+- Nota NPS, de 0 a 10
 - Classificação NPS
 - Motivo da nota
 
@@ -73,20 +73,23 @@ Classificação:
 
 - Promotores: notas 9 e 10.
 - Neutros: notas 7 e 8.
-- Detratores: notas 1 a 6.
+- Detratores: notas 0 a 6.
 
 Fórmula: `% promotores - % detratores`.
 
-### Blocos temáticos
+### Avaliação 1 a 5
 
-Os quatro blocos da pesquisa aparecem na leitura executiva com peso visual de 25% cada:
+As perguntas de satisfação da versão 2026 usam escala de 1 a 5 e aparecem na leitura executiva por médias de dimensão:
 
-- Relacionamento e Satisfação.
-- Percepção de Valor.
-- Qualidade Operacional.
-- Inovação, Transformação e Futuro.
+- Inovação e relevância.
+- Execução contratada.
+- Conhecimento e parceria.
+- Entregas.
+- Comunicação.
+- Valor percebido.
+- Atendimento.
 
-Esse peso de 25% organiza a leitura temática, mas não altera o cálculo oficial do NPS.
+Essas médias explicam a experiência da parceria, mas não alteram o cálculo oficial do NPS.
 
 ### Follow-up interno
 

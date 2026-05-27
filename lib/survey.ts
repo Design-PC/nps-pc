@@ -7,6 +7,7 @@ export type SurveyQuestion = {
   required: boolean;
   category: string;
   helper?: string;
+  scale?: "nps_0_10" | "satisfaction_1_5";
 };
 
 export type SurveyStep = {
@@ -64,171 +65,135 @@ export const surveySteps: SurveyStep[] = [
     questions: identityQuestions,
   },
   {
-    id: "relacionamento-satisfacao",
-    title: "Relacionamento e Satisfação",
+    id: "recomendacao",
+    title: "Recomendação",
     eyebrow: "Etapa 2",
-    description:
-      "Começamos pela percepção geral sobre a parceria com a Prime Control.",
+    description: "Escala: 0 = nada provável e 10 = muito provável.",
     questions: [
       {
         id: "nps_recommendation",
         type: "rating",
-        label:
-          "Qual a probabilidade de você recomendar a Prime Control para outras empresas?",
+        label: "Qual a probabilidade de você recomendar a Prime Control para outras empresas?",
         required: true,
-        category: "Relacionamento e Satisfação",
+        category: "NPS",
+        scale: "nps_0_10",
       },
       {
         id: "nps_reason",
         type: "text",
-        label: "Qual foi o principal motivo para a nota atribuída?",
+        label: "O que a Prime Control faz bem hoje que te levou a dar essa nota?",
         required: false,
-        category: "Relacionamento e Satisfação",
-        helper: "Se preferir, responda em uma frase objetiva.",
+        category: "NPS",
       },
     ],
   },
   {
-    id: "percepcao-valor",
-    title: "Percepção de Valor",
+    id: "avaliacao-parceria",
+    title: "Avaliação da parceria",
     eyebrow: "Etapa 3",
-    description:
-      "Agora, avaliamos pontos específicos sobre valor percebido e aderência ao seu negócio.",
+    description: "Escala: 1 = nada satisfeito e 5 = muito satisfeito.",
     questions: [
       {
-        id: "value_business_attention",
+        id: "innovation_relevance",
         type: "rating",
-        label:
-          "Como você avalia a Prime Control em relação ao atendimento do seu negócio?",
+        label: "Você percebe que a Prime Control entrega soluções inovadoras e relevantes para o seu negócio?",
         required: true,
-        category: "Percepção de Valor",
+        category: "Inovação e relevância",
+        scale: "satisfaction_1_5",
       },
       {
-        id: "value_solution_relevance",
-        type: "rating",
-        label:
-          "Como você avalia a relevância das soluções entregues para os desafios da sua empresa?",
-        required: true,
-        category: "Percepção de Valor",
+        id: "innovation_expectation",
+        type: "text",
+        label: "O que você esperaria de uma empresa inovadora que ainda não percebe na atuação da Prime Control?",
+        required: false,
+        category: "Inovação e relevância",
       },
       {
-        id: "value_perceived",
+        id: "contracted_services",
         type: "rating",
-        label:
-          "As soluções da Prime Control têm gerado valor percebido para o seu negócio?",
+        label: "Como você avalia os serviços prestados pela Prime Control em relação ao que foi contratado?",
         required: true,
-        category: "Percepção de Valor",
+        category: "Execução contratada",
+        scale: "satisfaction_1_5",
       },
       {
-        id: "value_results_commitment",
+        id: "business_knowledge",
         type: "rating",
-        label: "Como você avalia nosso comprometimento com resultados?",
+        label: "Como você avalia o nosso conhecimento do seu negócio?",
         required: true,
-        category: "Percepção de Valor",
+        category: "Conhecimento e parceria",
+        scale: "satisfaction_1_5",
       },
       {
-        id: "value_problem_solving",
+        id: "delivery_quality",
         type: "rating",
-        label: "Como você avalia nosso engajamento na solução de problemas?",
+        label: "Como você avalia a qualidade das nossas entregas?",
         required: true,
-        category: "Percepção de Valor",
-      },
-    ],
-  },
-  {
-    id: "qualidade-operacional",
-    title: "Qualidade Operacional",
-    eyebrow: "Etapa 4",
-    description:
-      "Esta etapa captura sua avaliação sobre entregas, prazos, comunicação e atendimento.",
-    questions: [
-      {
-        id: "ops_delivery_quality",
-        type: "rating",
-        label: "Como você avalia a qualidade das entregas realizadas?",
-        required: true,
-        category: "Qualidade Operacional",
+        category: "Entregas",
+        scale: "satisfaction_1_5",
       },
       {
-        id: "ops_deadlines",
+        id: "delivery_communication",
         type: "rating",
-        label: "Como você avalia cumprimento dos prazos acordados?",
+        label: "Você se sente bem informado sobre o andamento e os resultados das entregas?",
         required: true,
-        category: "Qualidade Operacional",
+        category: "Comunicação",
+        scale: "satisfaction_1_5",
       },
       {
-        id: "ops_result_clarity",
+        id: "problem_solving_engagement",
         type: "rating",
-        label:
-          "Como você avalia a clareza e objetividade das apresentações de resultados?",
+        label: "Como você avalia o nosso engajamento na solução de problemas?",
         required: true,
-        category: "Qualidade Operacional",
+        category: "Conhecimento e parceria",
+        scale: "satisfaction_1_5",
       },
       {
-        id: "ops_response_time",
+        id: "deadline_delivery",
+        type: "rating",
+        label: "Como você avalia as entregas da Prime Control dentro dos prazos acordados?",
+        required: true,
+        category: "Entregas",
+        scale: "satisfaction_1_5",
+      },
+      {
+        id: "result_presentations",
+        type: "rating",
+        label: "As nossas apresentações de resultados são claras, objetivas e relevantes para o seu negócio?",
+        required: true,
+        category: "Comunicação",
+        scale: "satisfaction_1_5",
+      },
+      {
+        id: "perceived_value",
+        type: "rating",
+        label: "As soluções da Prime Control têm gerado valor percebido para o seu negócio?",
+        required: true,
+        category: "Valor percebido",
+        scale: "satisfaction_1_5",
+      },
+      {
+        id: "service_quality",
+        type: "rating",
+        label: "Como você avalia a qualidade do atendimento recebido pela nossa equipe?",
+        required: true,
+        category: "Atendimento",
+        scale: "satisfaction_1_5",
+      },
+      {
+        id: "response_time",
         type: "rating",
         label: "Como você avalia o tempo de resposta da nossa equipe?",
         required: true,
-        category: "Qualidade Operacional",
+        category: "Atendimento",
+        scale: "satisfaction_1_5",
       },
       {
-        id: "ops_service_quality",
-        type: "rating",
-        label: "Como você avalia qualidade do atendimento recebido?",
-        required: true,
-        category: "Qualidade Operacional",
-      },
-    ],
-  },
-  {
-    id: "inovacao-futuro",
-    title: "Inovação, Transformação e Futuro",
-    eyebrow: "Etapa 5",
-    description:
-      "Última etapa: sua visão sobre futuro, inovação e oportunidades de evolução.",
-    questions: [
-      {
-        id: "future_innovative_company",
-        type: "rating",
-        label:
-          "Você percebe a Prime Control como uma empresa inovadora e alinhada às tendências do mercado?",
-        required: true,
-        category: "Inovação, Transformação e Futuro",
-      },
-      {
-        id: "future_trend_anticipation",
-        type: "rating",
-        label:
-          "Como você avalia a capacidade da Prime Control antecipar tendências e propor soluções para os desafios do seu negócio?",
-        required: true,
-        category: "Inovação, Transformação e Futuro",
-      },
-      {
-        id: "future_innovation_areas",
+        id: "partnership_improvements",
         type: "text",
-        label:
-          "Em quais áreas você acredita que a Prime Control poderia investir mais inovação para fortalecer ainda mais nossa parceria?",
+        label: "Quais entregas, melhorias ou iniciativas da Prime Control fariam sentido para ampliar nossa parceria e gerar ainda mais valor para o seu negócio?",
         required: false,
-        category: "Inovação, Transformação e Futuro",
-        helper: "Comentários curtos já ajudam a direcionar ações.",
-      },
-      {
-        id: "future_strategic_partner_expectation",
-        type: "text",
-        label:
-          "O que você espera de uma empresa parceira estratégica que ainda não percebe na atuação da Prime Control?",
-        required: false,
-        category: "Inovação, Transformação e Futuro",
-        helper: "Se preferir, responda em uma frase objetiva.",
-      },
-      {
-        id: "future_partnership_improvements",
-        type: "text",
-        label:
-          "Quais iniciativas, soluções ou melhorias podem ampliar nossa parceria e gerar ainda mais valor para o seu negócio?",
-        required: false,
-        category: "Inovação, Transformação e Futuro",
-        helper: "Comentários curtos já ajudam a direcionar ações.",
+        category: "Valor percebido",
       },
     ],
   },
