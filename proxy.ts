@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { getAdminSessionSecret, verifyAdminSessionToken } from "@/lib/admin-auth";
 
 const protectedPaths = ["/admin", "/api/admin"];
 const publicAdminPaths = ["/admin/login", "/api/admin/login"];
@@ -12,75 +13,62 @@ function isPublicAdminPath(pathname: string) {
   return publicAdminPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 }
 
-function hasValidSessionCookie(request: NextRequest, username: string, password: string) {
+function withSecurityHeaders(response: NextResponse) {
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  return response;
+}
+
+async function hasValidSessionCookie(request: NextRequest, username: string, secret: string) {
   const cookieValue = request.cookies.get(sessionCookieName)?.value;
 
   if (!cookieValue) {
     return false;
   }
 
-  try {
-    const decoded = atob(cookieValue);
-    const [providedUsername, providedPassword, expiresAt] = decoded.split(":");
-
-    return (
-      providedUsername === username &&
-      providedPassword === password &&
-      Number(expiresAt) > Date.now()
-    );
-  } catch {
-    return false;
-  }
+  return verifyAdminSessionToken(cookieValue, username, secret);
 }
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const username = process.env.ADMIN_USERNAME;
   const password = process.env.ADMIN_PASSWORD;
+  const sessionSecret = getAdminSessionSecret();
   const pathname = request.nextUrl.pathname;
 
   if (!isProtectedPath(pathname) || isPublicAdminPath(pathname)) {
-    return NextResponse.next();
+    return withSecurityHeaders(NextResponse.next());
   }
 
-  if (!username || !password) {
+  if (!username || !password || !sessionSecret) {
     if (process.env.NODE_ENV === "development") {
-      return NextResponse.next();
+      return withSecurityHeaders(NextResponse.next());
     }
 
-    return new NextResponse("Admin credentials are not configured", {
-      status: 503,
-    });
+    return withSecurityHeaders(
+      new NextResponse("Admin credentials are not configured", {
+        status: 503,
+      }),
+    );
   }
 
-  if (hasValidSessionCookie(request, username, password)) {
-    return NextResponse.next();
-  }
-
-  const authorization = request.headers.get("authorization");
-
-  if (authorization?.startsWith("Basic ")) {
-    const encoded = authorization.slice("Basic ".length);
-    const decoded = atob(encoded);
-    const [providedUsername, providedPassword] = decoded.split(":");
-
-    if (providedUsername === username && providedPassword === password) {
-      return NextResponse.next();
-    }
+  if (await hasValidSessionCookie(request, username, sessionSecret)) {
+    return withSecurityHeaders(NextResponse.next());
   }
 
   if (pathname.startsWith("/admin")) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/admin/login";
     loginUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(loginUrl);
+    return withSecurityHeaders(NextResponse.redirect(loginUrl));
   }
 
-  return new NextResponse("Authentication required", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": 'Basic realm="Prime Control NPS Admin"',
-    },
-  });
+  return withSecurityHeaders(
+    new NextResponse("Authentication required", {
+      status: 401,
+    }),
+  );
 }
 
 export const config = {

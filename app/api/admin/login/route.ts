@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
+import {
+  createAdminSessionToken,
+  getAdminSessionMaxAgeSeconds,
+  getAdminSessionSecret,
+} from "@/lib/admin-auth";
 
 const sessionCookieName = "prime_nps_admin_session";
-const oneDayInSeconds = 60 * 60 * 24;
 
 export async function POST(request: Request) {
   const { username, password } = (await request.json().catch(() => ({}))) as {
@@ -11,8 +15,9 @@ export async function POST(request: Request) {
 
   const expectedUsername = process.env.ADMIN_USERNAME;
   const expectedPassword = process.env.ADMIN_PASSWORD;
+  const sessionSecret = getAdminSessionSecret();
 
-  if (!expectedUsername || !expectedPassword) {
+  if (!expectedUsername || !expectedPassword || !sessionSecret) {
     return NextResponse.json(
       { message: "Credenciais administrativas não configuradas." },
       { status: 503 },
@@ -26,13 +31,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const expiresAt = Date.now() + oneDayInSeconds * 1000;
-  const sessionValue = btoa(`${expectedUsername}:${expectedPassword}:${expiresAt}`);
+  const sessionValue = await createAdminSessionToken(expectedUsername, sessionSecret);
   const response = NextResponse.json({ ok: true });
 
   response.cookies.set(sessionCookieName, sessionValue, {
     httpOnly: true,
-    maxAge: oneDayInSeconds,
+    maxAge: getAdminSessionMaxAgeSeconds(),
     path: "/",
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",

@@ -586,7 +586,7 @@ def add_technical_prd(doc: Document) -> None:
         ["CRM", "HubSpot", "Envio, segmentação, status e lembretes."],
         ["Analytics", "Clarity, PostHog, GA4", "Comportamento visual, funil e origem."],
         ["Dashboard", "Power BI, Metabase ou dashboard interno", "Leitura executiva e operacional."],
-        ["Segurança", "Controle interno seguro, HTTPS, LGPD", "Controle de acesso e minimização de dados."],
+        ["Segurança", "Controle interno seguro, sessão assinada, HTTPS e LGPD", "Controle de acesso, minimização de dados e proteção das exportações."],
     ]
     add_table(doc, ["Camada", "Tecnologia", "Responsabilidade"], rows, widths=[1.35, 2.3, 2.85])
     add_heading(doc, "Rotas e componentes", 2)
@@ -613,6 +613,8 @@ def add_technical_prd(doc: Document) -> None:
     add_heading(doc, "LGPD e segurança", 2)
     for item in [
         "Identificador interno aleatório, único e com expiração; não expor esse controle na interface do cliente.",
+        "Sessão administrativa assinada, sem armazenar senha no cookie.",
+        "ADMIN_SESSION_SECRET obrigatório em produção para proteger o painel interno.",
         "HTTPS obrigatório e acesso restrito ao dashboard.",
         "Mascaramento de dados sensíveis no Microsoft Clarity.",
         "Separação entre análise agregada e visualização individual autorizada.",
@@ -668,7 +670,7 @@ def add_mvp_status(doc: Document) -> None:
     add_heading(doc, "12. Status do MVP atual", 1)
     add_para(doc, "A primeira versão navegável já foi criada para validar a experiência do respondente e agora possui pesquisa oficial em página única, camada funcional de dados, dashboard interno, Clarity, exportações CSV/Excel/PDF e estados controlados para acessos incorretos.")
     rows = [
-        ["Implementado", "Next.js, pesquisa one-page oficial na raiz, perguntas preservadas, perguntas numeradas, identificação simplificada, validação visual de e-mail corporativo, APIs internas, Supabase preparado, dashboard interno protegido, exportações CSV/Excel/PDF, logo, identidade visual, Clarity e backups de landing/multi-step."],
+        ["Implementado", "Next.js, pesquisa one-page oficial na raiz, perguntas preservadas, perguntas numeradas, identificação simplificada, validação visual de e-mail corporativo, APIs internas, Supabase preparado, dashboard interno protegido com sessão assinada, exportações CSV/Excel/PDF, logo, identidade visual, Clarity e backups de landing/multi-step."],
         ["Ainda pendente", "Importação oficial de respondentes, integração HubSpot, integração Microsoft Graph com SharePoint/OneDrive, PostHog, GA4, subdomínio nps.primecontrol.com.br, refinamento final do dashboard e validação de campanha."],
         ["Decisão técnica", "Evoluir o MVP para plataforma própria, usando Typeform apenas como benchmark ou fallback emergencial."],
     ]
