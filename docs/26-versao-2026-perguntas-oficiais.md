@@ -29,12 +29,16 @@ Esse texto é mais adequado para disparos via e-mail/HubSpot, porque cada contat
 - Área
 - Cargo
 
+Todos os campos de identificação são obrigatórios.
+
 ### NPS
 
 Escala: 0 = nada provável e 10 = muito provável.
 
 - Qual a probabilidade de você recomendar a Prime Control para outras empresas?
 - O que a Prime Control faz bem hoje que te levou a dar essa nota?
+
+As duas respostas desta seção são obrigatórias.
 
 ### Avaliação da parceria
 
@@ -53,6 +57,8 @@ Escala: 1 = nada satisfeito e 5 = muito satisfeito.
 - Como você avalia a qualidade do atendimento recebido pela nossa equipe?
 - Como você avalia o tempo de resposta da nossa equipe?
 - Quais entregas, melhorias ou iniciativas da Prime Control fariam sentido para ampliar nossa parceria e gerar ainda mais valor para o seu negócio?
+
+Todas as perguntas de escala e os campos abertos da versão 2026 são obrigatórios.
 
 ## Impacto no dashboard
 

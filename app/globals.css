@@ -1386,8 +1386,7 @@ button:focus-visible,
     box-shadow 140ms ease;
 }
 
-.classic-score:first-child,
-.classic-row-open .classic-open-field {
+.classic-score:first-child {
   border-left: 0;
 }
 
@@ -1403,7 +1402,8 @@ button:focus-visible,
 
 .classic-open-field {
   display: block;
-  width: 340px;
+  width: 374px;
+  border-left: 1px solid #d7e2ec;
 }
 
 .classic-open-field textarea {

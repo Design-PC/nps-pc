@@ -68,6 +68,7 @@ const sections: ClassicSection[] = [
       {
         id: "nps_reason",
         type: "text",
+        required: true,
         label: "O que a Prime Control faz bem hoje que te levou a dar essa nota?",
       },
     ],
@@ -88,6 +89,7 @@ const sections: ClassicSection[] = [
       {
         id: "innovation_expectation",
         type: "text",
+        required: true,
         label:
           "O que você esperaria de uma empresa inovadora que ainda não percebe na atuação da Prime Control?",
       },
@@ -156,6 +158,7 @@ const sections: ClassicSection[] = [
       {
         id: "partnership_improvements",
         type: "text",
+        required: true,
         label:
           "Quais entregas, melhorias ou iniciativas da Prime Control fariam sentido para ampliar nossa parceria e gerar ainda mais valor para o seu negócio?",
       },
@@ -199,6 +202,16 @@ export function ClassicSurveyExperience() {
     [],
   );
 
+  const requiredTexts = useMemo(
+    () =>
+      sections.flatMap((section) =>
+        section.questions
+          .filter((question) => question.type === "text" && question.required)
+          .map((question) => question.id),
+      ),
+    [],
+  );
+
   useEffect(() => {
     trackEvent("survey_classic_viewed", {
       campaign_id: "prime-control-nps-2026",
@@ -237,6 +250,12 @@ export function ClassicSurveyExperience() {
 
     if (missingRating) {
       return "Selecione uma nota para todas as perguntas de escala.";
+    }
+
+    const missingText = requiredTexts.find((questionId) => !hasAnswer(answers[questionId]));
+
+    if (missingText) {
+      return "Preencha todos os campos abertos obrigatórios.";
     }
 
     return "";
@@ -394,8 +413,9 @@ export function ClassicSurveyExperience() {
                         ) : (
                           <label className="classic-open-field">
                             <textarea
+                              aria-required={question.required}
                               value={String(answers[question.id] ?? "")}
-                              placeholder="Escreva sua resposta, se desejar"
+                              placeholder="Escreva sua resposta"
                               onChange={(event) => updateAnswer(question.id, event.target.value)}
                             />
                           </label>
